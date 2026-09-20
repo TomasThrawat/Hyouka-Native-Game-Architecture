@@ -274,10 +274,10 @@ class HyoukaGame : ApplicationAdapter() {
             val b = edge((i + 1) % points.size)
 
             part.rect(
-                info(b.second.first, b.second.second),
                 info(a.first.first, a.first.second),
-                info(b.first.first, b.first.second),
-                info(b.second.first, b.second.second)
+                info(a.second.first, a.second.second),
+                info(b.second.first, b.second.second),
+                info(b.first.first, b.first.second)
             )
         }
 
@@ -299,8 +299,6 @@ class HyoukaGame : ApplicationAdapter() {
 
         fun info(x: Float, z: Float) =
             MeshPartBuilder.VertexInfo().setPos(x, y, z).setNor(0f, 1f, 0f)
-
-        val curbWidth = 0.24f
 
         fun edge(i: Int): Pair<Pair<Float, Float>, Pair<Float, Float>> {
             val n = points.size
