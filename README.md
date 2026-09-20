@@ -1,60 +1,67 @@
 # Hyouka Native Game Architecture
 
-قالب هندسي لإعادة استخدام بنية ألعاب Android Native المكتوبة بـ Kotlin.
+قالب Native Kotlin لألعاب Android، مبني على الدروس الهندسية المستخلصة من CircuitRush3D.
 
-الفكرة الأساسية مأخوذة من الدروس المستخلصة من CircuitRush3D، لكن هذا المستودع لا يفترض أن كل لعبة يجب أن تستخدم نفس التنفيذ. كل نظام يجب اختباره واختياره حسب متطلبات اللعبة الجديدة.
+المستودع الآن قالب تشغيل فعلي، وليس مجرد README أو skeleton.
 
-## المبادئ
+## المطبق
 
-- Native Kotlin على Android.
-- فصل الـ rendering عن منطق اللعبة.
-- فصل Physics وAI وRace وTrack.
-- إدارة أصول 3D وGLB في طبقة مستقلة.
-- فصل HUD/UI عن منطق اللعبة.
-- جعل الصوت نظامًا مستقلًا.
-- استخدام JSON لبيانات السيارات والمسارات.
-- تصميم قابل لإضافة سيارات وخرائط وأصول متعددة.
-- إبقاء التصادمات والتوجيه والفيزياء والـAI كأنظمة مستقلة.
-- تخزين أصول GLB داخل Android assets.
-- عدم خلط game logic مع rendering أو UI.
+- Native Android + Kotlin.
+- فصل Game عن GameRenderer وعن Scene.
+- أنظمة مستقلة: Physics, Collision, AI, Race, Track.
+- GLB/JSON asset layer.
+- HUD مستقل عن simulation.
+- Sound subsystem مستقل.
+- Game loop على frame clock.
+- immutable GameSnapshot بين simulation والرسم.
+- unit tests للأنظمة الأساسية.
+- SceneView/Filament لطبقة 3D.
+- GitHub Actions للاختبار وبناء APK.
 
-## الهيكل
+## البنية
 
-```
-app/src/main/java/com/tomasthrawat/gamearchitecture/
-├── MainActivity.kt
-├── Game.kt
-├── GameRenderer.kt
-├── Scene.kt
-├── Physics.kt
-├── Collision.kt
-├── Ai.kt
-├── Race.kt
-├── Track.kt
-├── Glb.kt
-├── HudView.kt
-├── Sound.kt
-└── DataModels.kt
+MainActivity
+ -> Game loop
+ -> Game
+    -> Physics
+    -> Collision
+    -> AI
+    -> Race
+    -> Track
+ -> GameSnapshot
+ -> GameScene / GameRenderer
+ -> GameHud
+ -> Glb / JSON
+ -> Sound
 
-app/src/main/assets/
-├── cars.json
-├── tracks.json
-└── models/
-```
+## قاعدة التصميم
 
-## قاعدة مهمة
+الرسم لا يقرر قواعد اللعبة.
 
-هذا المستودع **مرجع هندسي** وليس كودًا يجب نسخه بشكل أعمى.
+Game ينتج GameSnapshot. Scene يحول snapshot إلى transforms مرئية. لذلك يمكن استبدال renderer أو GLB assets بدون إعادة كتابة الفيزياء والـAI والـRace.
 
-قبل استخدام أي نظام في لعبة جديدة:
-1. حدد متطلبات اللعبة.
-2. اختبر النظام مستقلًا.
-3. تحقق من الأداء والـlifecycle.
-4. افصل dependencies قدر الإمكان.
-5. لا تنقل مشكلة من لعبة إلى لعبة أخرى بمجرد نسخ الكود.
+## 3D
 
-## مستوحى من
+القالب يحتوي على مشهد procedural يعمل بدون أي GLB، حتى يكون APK قابلًا للتشغيل قبل إضافة assets حقيقية.
 
-- CircuitRush3D architecture.
-- Native Android/Kotlin game development.
-- GLB-based 3D asset workflows.
+عند إضافة assets، ضع GLB داخل app/src/main/assets/models/ وحدد مساره في cars.json أو tracks.json. طبقة Glb تتحقق من وجود الملف ومن GLB magic header.
+
+SceneView الحالي هو 4.37.0، وتوثيقه الرسمي يوضح SceneView وModelNode وCubeNode وPlaneNode وDynamicSkyNode، إضافة إلى أن تحميل GLB يتم عبر rememberModelInstance مع إدارة lifecycle. citeturn1search0turn4search0
+
+## الأداء
+
+لا تنشئ Engine أو ModelInstance في كل frame. لا تضع Filament JNI أو تحميل GLB في background thread. وثائق SceneView توصي بإعادة استخدام الموارد وتجنب allocations داخل مسار الرسم. citeturn6search0
+
+## الملفات المهمة
+
+- ARCHITECTURE.md
+- docs/LESSONS.md
+- app/src/main/java/.../Game.kt
+- app/src/main/java/.../Physics.kt
+- app/src/main/java/.../Ai.kt
+- app/src/main/java/.../Race.kt
+- app/src/main/java/.../Track.kt
+- app/src/main/java/.../Scene.kt
+- app/src/main/java/.../Glb.kt
+- app/src/main/java/.../HudView.kt
+- app/src/main/java/.../Sound.kt

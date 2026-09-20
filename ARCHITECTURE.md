@@ -1,152 +1,99 @@
-# Architecture Guide
+# Architecture
 
-## 1. Game
+## 1. Simulation
 
-يمتلك حالة اللعبة العامة ويجمع الأنظمة، لكنه لا يرسم المشهد ولا يبني واجهة المستخدم.
+Game هو orchestrator صغير ولا يعتمد على Compose أو Filament.
 
-المسؤوليات:
-- game state
-- lifecycle
-- simulation tick
-- ربط الأنظمة
+Input -> Game -> Physics/Collision/AI/Race -> GameSnapshot
 
-## 2. GameRenderer
+كل subsystem له مسؤولية منفصلة.
 
-مسؤول فقط عن تحويل حالة اللعبة إلى rendering.
+## 2. Renderer
 
-لا يجب أن يحتوي على:
-- قواعد السباق
-- حسابات الفيزياء
-- منطق الـAI
-- معالجة أزرار HUD كقواعد لعبة
+GameRenderer هو boundary بين simulation والرسم.
+
+Scene هو طبقة 3D الفعلية. لا يجب أن يحتوي على physics أو AI أو race rules.
 
 ## 3. Scene
 
-يمثل العالم المرئي:
+Scene مسؤول عن:
 - camera
-- lights
-- scene nodes
-- track objects
-- cars
+- lighting
 - environment
+- world geometry
+- model placement
+- تحويل GameSnapshot إلى transforms
 
-يمكن تغيير محرك الـ3D لاحقًا بدون نقل منطق الفيزياء إلى طبقة العرض.
+القالب يستخدم procedural geometry كـfallback. يمكن استبدالها بـGLB دون تغيير simulation.
 
 ## 4. Physics
 
-مسؤول عن:
+Physics يحسب:
 - acceleration
 - braking
+- drag
 - steering
-- velocity
-- friction
-- movement integration
+- speed
+- progress
 
 ## 5. Collision
 
-مسؤول عن:
-- car-vs-car
-- car-vs-track
-- barriers
-- collision response
-
-يفضل أن يبقى مستقلًا عن الـUI والـrenderer.
+Collision يحسب:
+- track bounds
+- speed response
+- car overlap
 
 ## 6. AI
 
-مسؤول عن:
-- target speed
-- racing line
-- steering target
-- overtaking decisions
-- recovery
+AI ينتج input للسيارات المنافسة ثم يمرره إلى Physics.
 
-الـAI يقرأ حالة العالم ويكتب input/intent، وليس transforms الخاصة بالـrenderer مباشرة.
+AI لا يعدل renderer.
 
 ## 7. Race
 
-مسؤول عن:
+Race مسؤول عن:
 - laps
-- checkpoints
-- race order
-- countdown
+- position
+- elapsed time
 - finish state
 
 ## 8. Track
 
-مسؤول عن:
-- track layout
-- segments
-- spawn points
-- checkpoints
-- map-specific data
+Track يحول progress وlateral offset إلى world pose.
 
-يمكن تحميل بيانات المسار من JSON.
+يمكن لاحقًا استبدال التنفيذ بـspline أو checkpoints أو imported track segments.
 
-## 9. GLB
+## 9. Assets
 
-طبقة مخصصة لإدارة أصول 3D:
-- loading
-- caching
-- validation
-- model lookup
-- animation metadata
+Glb مسؤول عن:
+- asset existence
+- GLB validation
+- JSON catalog parsing
 
-الأصول الفعلية توضع داخل `app/src/main/assets`.
+JSON يصف البيانات. GLB يحتوي geometry/material/animation.
 
-## 10. HudView
+## 10. UI
 
-يعرض البيانات فقط:
-- speed
-- lap
-- position
-- buttons
-- race messages
+GameHud يعرض GameSnapshot ويرسل GameInput.
 
-لا يجب أن يحتوي على Physics أو AI.
+لا يحتوي على physics أو AI.
 
 ## 11. Sound
 
-نظام مستقل:
-- engine audio
-- brakes
-- collisions
-- UI sounds
-- music
+Sound interface مستقلة. SilentSound يمنع إجبار القالب على شحن audio assets.
 
-لا تجعل renderer مسؤولًا عن الصوت.
+## 12. Testing
 
-## 12. JSON
+Physics وCollision وRace وGame قابلة للاختبار بدون Android UI.
 
-البيانات التي تتغير كثيرًا يجب فصلها عن الكود.
+## 13. Reuse
 
-مثال:
+لبناء لعبة جديدة:
+1. عدّل DataModels.
+2. أضف أو استبدل systems.
+3. استبدل Track.
+4. استبدل Scene.
+5. أضف GLB وJSON وaudio assets.
+6. اترك Game rules خارج MainActivity وScene.
 
-```json
-{
-  "id": "formula_01",
-  "model": "models/formula_01.glb",
-  "mass": 720,
-  "maxSpeed": 310
-}
-```
-
-## Dependency direction
-
-يفضل أن يكون الاتجاه تقريبًا:
-
-```
-UI -> Game -> Systems
-Renderer -> Scene -> Assets
-Systems -> Data
-Sound -> Game events
-```
-
-وتجنب:
-
-```
-Physics -> HudView
-AI -> Compose UI
-HudView -> Renderer internals
-Renderer -> Race rules
-```
+الهدف هو نفس الدرس الهندسي الأساسي: فصل GameRenderer وScene وPhysics وAI وRace وTrack وGlb وHudView وSound.

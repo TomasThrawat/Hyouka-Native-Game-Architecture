@@ -1,34 +1,22 @@
 # Reusable Lessons
 
-هذه هي الرسالة المحفوظة كمرجع هندسي:
+هذه الدروس هي أساس القالب الحالي:
 
-- بناء ألعاب Native Kotlin على Android.
-- فصل GameRenderer عن Scene.
-- فصل أنظمة Physics وAI وRace وTrack.
-- استخدام Glb لإدارة وتحميل أصول 3D.
-- فصل HudView عن منطق اللعبة.
-- جعل Sound نظامًا مستقلًا.
-- استخدام ملفات JSON لبيانات السيارات والمسارات.
-- تصميم المشروع بحيث يمكن إضافة سيارات وخرائط وأصول متعددة بسهولة.
-- دمج الفيزياء والتصادمات والـAI والتوجيه كأنظمة مستقلة.
-- إدارة أصول GLB داخل assets.
-- عدم خلط منطق اللعبة مع الـrendering والـUI.
-- استخدام هذا الهيكل كمرجع هندسي عند بناء ألعاب مستقبلية، مع التحقق من ملاءمة كل جزء للعبة الجديدة بدل نسخه بشكل أعمى.
+1. بناء ألعاب Native Kotlin على Android.
+2. فصل GameRenderer عن Scene.
+3. فصل Physics وAI وRace وTrack.
+4. استخدام GLB لإدارة أصول 3D.
+5. فصل HudView عن منطق اللعبة.
+6. Sound كـsubsystem مستقل.
+7. JSON لبيانات السيارات والحلبات.
+8. عدم خلط game logic مع renderer أو Compose UI.
+9. اختبار simulation بدون Android UI.
+10. تمرير immutable GameSnapshot إلى الرسم.
+11. تغيير assets بدون تغيير simulation code.
+12. إضافة سيارات وخرائط وأنظمة جديدة بدون إعادة كتابة النواة.
+13. procedural fallback أثناء تطوير assets.
+14. عدم إعادة إنشاء Engine أو ModelInstance لكل frame.
+15. إبقاء Filament JNI على main thread.
+16. التحقق من كل subsystem قبل دمجه.
 
-## تطبيق الدروس
-
-عند بدء لعبة جديدة، لا تبدأ من الـUI.
-
-ابدأ بهذا الترتيب:
-
-1. Data models.
-2. World/Track representation.
-3. Physics.
-4. Collision.
-5. AI.
-6. Race/Game state.
-7. Asset loading.
-8. Renderer/Scene.
-9. HUD.
-10. Sound.
-11. Integration testing.
+الهدف ليس نسخ CircuitRush3D. الهدف تحويل الدروس الهندسية المستخلصة منه إلى template reusable وقابل للتوسع.
