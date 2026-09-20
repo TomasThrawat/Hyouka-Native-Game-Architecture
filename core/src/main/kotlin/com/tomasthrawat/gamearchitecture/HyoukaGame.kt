@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
 import net.mgsx.gltf.loaders.glb.GLBLoader
+import net.mgsx.gltf.scene3d.lights.DirectionalLightEx
 import net.mgsx.gltf.scene3d.scene.Scene
 import net.mgsx.gltf.scene3d.scene.SceneAsset
 import net.mgsx.gltf.scene3d.scene.SceneManager
@@ -54,6 +55,22 @@ class HyoukaGame : ApplicationAdapter() {
             PBRShaderProvider.createDefault(cfg),
             PBRShaderProvider.createDefaultDepth(
                 PBRShaderProvider.createDefaultDepthConfig()
+            )
+        )
+
+        manager.setAmbientLight(0.55f)
+        manager.environment.add(
+            DirectionalLightEx().set(
+                Color.WHITE,
+                Vector3(-1f, -3f, -2f),
+                4f
+            )
+        )
+        manager.environment.add(
+            DirectionalLightEx().set(
+                Color.WHITE,
+                Vector3(1f, -1f, 1f),
+                1.25f
             )
         )
 
