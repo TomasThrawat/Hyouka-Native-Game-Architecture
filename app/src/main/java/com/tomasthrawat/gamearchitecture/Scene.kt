@@ -20,7 +20,10 @@ import io.github.sceneview.rememberMaterialLoader
 import io.github.sceneview.rememberModelInstance
 import io.github.sceneview.rememberModelLoader
 
-private const val ROAD_TILES = 20
+private const val TRACK_TILES = 32
+private const val ROAD_WIDTH = 8.6f
+private const val TILE_LENGTH = 4.7f
+private const val KERB_OFFSET = ROAD_WIDTH * 0.5f + 0.35f
 
 @Composable
 fun GameScene(
@@ -36,95 +39,74 @@ fun GameScene(
     val context = LocalContext.current
     val assets = remember(context) { Glb(context) }
 
-    val playerModel =
-        if (assets.isGlb(playerModelPath)) {
-            rememberModelInstance(modelLoader, playerModelPath)
-        } else {
-            null
-        }
+    val playerModel = if (assets.isGlb(playerModelPath)) {
+        rememberModelInstance(modelLoader, playerModelPath)
+    } else null
+    val rivalModel = if (assets.isGlb(rivalModelPath)) {
+        rememberModelInstance(modelLoader, rivalModelPath)
+    } else null
+    val startModel = if (assets.isGlb(track.definition.startModel)) {
+        rememberModelInstance(modelLoader, track.definition.startModel)
+    } else null
 
-    val rivalOne =
-        if (assets.isGlb(rivalModelPath)) {
-            rememberModelInstance(modelLoader, rivalModelPath)
-        } else {
-            null
-        }
-    val rivalTwo =
-        if (assets.isGlb(rivalModelPath)) {
-            rememberModelInstance(modelLoader, rivalModelPath)
-        } else {
-            null
-        }
-    val rivalThree =
-        if (assets.isGlb(rivalModelPath)) {
-            rememberModelInstance(modelLoader, rivalModelPath)
-        } else {
-            null
-        }
-
-    val startPath = track.definition.startModel
-    val startModel =
-        if (assets.isGlb(startPath)) {
-            rememberModelInstance(modelLoader, startPath)
-        } else {
-            null
-        }
-
-    val playerPose =
-        track.pose(
-            frame.player.progress,
-            frame.player.lateralOffset
-        )
-
-    val headingRadians =
-        Math.toRadians(playerPose.yawDegrees.toDouble())
-    val forwardX =
-        kotlin.math.sin(headingRadians).toFloat()
-    val forwardZ =
-        kotlin.math.cos(headingRadians).toFloat()
+    val playerPose = track.pose(frame.player.progress, frame.player.lateralOffset)
+    val heading = Math.toRadians(playerPose.yawDegrees.toDouble())
+    val forwardX = kotlin.math.sin(heading).toFloat()
+    val forwardZ = kotlin.math.cos(heading).toFloat()
 
     val camera = rememberCameraNode(engine) {
         position = Position(
-            x = playerPose.x - forwardX * 9f,
-            y = 4.2f,
-            z = playerPose.z - forwardZ * 9f
+            x = playerPose.x - forwardX * 5.8f,
+            y = 2.25f,
+            z = playerPose.z - forwardZ * 5.8f
         )
     }
-
     camera.position = Position(
-        x = playerPose.x - forwardX * 9f,
-        y = 4.2f,
-        z = playerPose.z - forwardZ * 9f
+        x = playerPose.x - forwardX * 5.8f,
+        y = 2.25f,
+        z = playerPose.z - forwardZ * 5.8f
     )
     camera.lookAt(
         Position(
-            playerPose.x,
-            0.75f,
-            playerPose.z
+            x = playerPose.x + forwardX * 2.0f,
+            y = 0.85f,
+            z = playerPose.z + forwardZ * 2.0f
         )
     )
 
-    val light = rememberMainLightNode(engine) {
-        intensity = 110_000f
-    }
+    val light = rememberMainLightNode(engine) { intensity = 110_000f }
 
     val groundMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            Color(0.06f, 0.15f, 0.08f, 1f),
+            Color(0.035f, 0.12f, 0.055f, 1f),
             metallic = 0f,
-            roughness = 0.96f
+            roughness = 0.98f
         )
     }
     val roadMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            Color(0.055f, 0.06f, 0.07f, 1f),
+            Color(0.045f, 0.052f, 0.06f, 1f),
             metallic = 0f,
             roughness = 0.92f
         )
     }
-    val kerbMaterial = remember(materialLoader) {
+    val redKerbMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            Color(0.72f, 0.05f, 0.04f, 1f),
+            Color(0.82f, 0.045f, 0.035f, 1f),
+            metallic = 0f,
+            roughness = 0.7f
+        )
+    }
+    val whiteKerbMaterial = remember(materialLoader) {
+        materialLoader.createColorInstance(
+            Color(0.92f, 0.92f, 0.92f, 1f),
+            metallic = 0f,
+            roughness = 0.72f
+        )
+    }
+    val laneMaterial = remember(materialLoader) {
+        materialLoader.createColorInstance(
+            Color(0.95f, 0.95f, 0.9f, 1f),
             metallic = 0f,
             roughness = 0.72f
         )
@@ -143,59 +125,67 @@ fun GameScene(
     ) {
         DynamicSkyNode(
             timeOfDay = 15f,
-            turbidity = 2.1f,
+            turbidity = 2.0f,
             sunIntensity = 110_000f
         )
-
         PlaneNode(
-            size = Size(120f, 120f),
+            size = Size(180f, 180f),
             materialInstance = groundMaterial,
             position = Position(y = -0.08f)
         )
 
-        repeat(ROAD_TILES) { index ->
-            val p = index.toFloat() / ROAD_TILES.toFloat()
+        repeat(TRACK_TILES) { index ->
+            val p = (index.toFloat() + 0.5f) / TRACK_TILES.toFloat()
             val pose = track.pose(p)
-
             CubeNode(
-                size = Size(24.6f, 0.10f, 7.05f),
+                size = Size(ROAD_WIDTH, 0.10f, TILE_LENGTH),
                 materialInstance = roadMaterial,
                 position = Position(pose.x, 0f, pose.z),
                 rotation = Rotation(y = pose.yawDegrees)
             )
 
             val yaw = Math.toRadians(pose.yawDegrees.toDouble())
-            val nx = -kotlin.math.cos(yaw).toFloat()
-            val nz = kotlin.math.sin(yaw).toFloat()
+            val sideX = -kotlin.math.cos(yaw).toFloat()
+            val sideZ = kotlin.math.sin(yaw).toFloat()
+            val kerbMaterial = if (index % 2 == 0) redKerbMaterial else whiteKerbMaterial
 
             CubeNode(
-                size = Size(0.75f, 0.11f, 7.05f),
+                size = Size(0.55f, 0.12f, TILE_LENGTH),
                 materialInstance = kerbMaterial,
                 position = Position(
-                    pose.x + nx * 12.1f,
-                    0.02f,
-                    pose.z + nz * 12.1f
+                    pose.x + sideX * KERB_OFFSET,
+                    0.03f,
+                    pose.z + sideZ * KERB_OFFSET
+                ),
+                rotation = Rotation(y = pose.yawDegrees)
+            )
+            CubeNode(
+                size = Size(0.55f, 0.12f, TILE_LENGTH),
+                materialInstance = kerbMaterial,
+                position = Position(
+                    pose.x - sideX * KERB_OFFSET,
+                    0.03f,
+                    pose.z - sideZ * KERB_OFFSET
                 ),
                 rotation = Rotation(y = pose.yawDegrees)
             )
 
-            CubeNode(
-                size = Size(0.75f, 0.11f, 7.05f),
-                materialInstance = kerbMaterial,
-                position = Position(
-                    pose.x - nx * 12.1f,
-                    0.02f,
-                    pose.z - nz * 12.1f
-                ),
-                rotation = Rotation(y = pose.yawDegrees)
-            )
+            if (index % 2 == 0) {
+                CubeNode(
+                    size = Size(0.12f, 0.025f, TILE_LENGTH * 0.55f),
+                    materialInstance = laneMaterial,
+                    position = Position(pose.x, 0.065f, pose.z),
+                    rotation = Rotation(y = pose.yawDegrees)
+                )
+            }
         }
 
         startModel?.let { instance ->
             val pose = track.pose(0f)
             ModelNode(
                 modelInstance = instance,
-                scaleToUnits = 1f,
+                scaleToUnits = 5.5f,
+                centerOrigin = Position(y = -1f),
                 position = Position(pose.x, 0f, pose.z),
                 rotation = Rotation(y = pose.yawDegrees),
                 autoAnimate = false
@@ -205,37 +195,22 @@ fun GameScene(
         playerModel?.let { instance ->
             ModelNode(
                 modelInstance = instance,
-                scaleToUnits = 1f,
-                position = Position(
-                    playerPose.x,
-                    0f,
-                    playerPose.z
-                ),
+                scaleToUnits = 2.2f,
+                centerOrigin = Position(y = -1f),
+                position = Position(playerPose.x, 0f, playerPose.z),
                 rotation = Rotation(y = playerPose.yawDegrees),
                 autoAnimate = false
             )
         }
 
-        val rivals = listOf(
-            rivalOne,
-            rivalTwo,
-            rivalThree
-        )
-
-        frame.opponents.forEachIndexed { index, opponent ->
-            rivals[index]?.let { instance ->
-                val pose = track.pose(
-                    opponent.progress,
-                    opponent.lateralOffset
-                )
+        frame.opponents.forEach { opponent ->
+            rivalModel?.let { instance ->
+                val pose = track.pose(opponent.progress, opponent.lateralOffset)
                 ModelNode(
                     modelInstance = instance,
-                    scaleToUnits = 1f,
-                    position = Position(
-                        pose.x,
-                        0f,
-                        pose.z
-                    ),
+                    scaleToUnits = 2.0f,
+                    centerOrigin = Position(y = -1f),
+                    position = Position(pose.x, 0f, pose.z),
                     rotation = Rotation(y = pose.yawDegrees),
                     autoAnimate = false
                 )

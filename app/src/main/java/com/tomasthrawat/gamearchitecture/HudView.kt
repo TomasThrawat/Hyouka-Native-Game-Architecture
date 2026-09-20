@@ -4,8 +4,9 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,7 +41,6 @@ fun GameHud(
             steerRightPressed && !steerLeftPressed -> 1f
             else -> 0f
         }
-
         onInput(
             GameInput(
                 throttle = if (throttlePressed) 1f else 0f,
@@ -52,64 +52,75 @@ fun GameHud(
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(14.dp)
+            .fillMaxSize()
+            .padding(horizontal = 18.dp, vertical = 14.dp)
     ) {
         Surface(
             modifier = Modifier.align(Alignment.TopCenter),
-            color = Color.Black.copy(alpha = 0.64f),
+            color = Color.Black.copy(alpha = 0.62f),
             shape = RoundedCornerShape(18.dp)
         ) {
             Text(
-                modifier = Modifier.padding(
-                    horizontal = 18.dp,
-                    vertical = 10.dp
-                ),
+                modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp),
                 text = "LAP " + frame.race.lap +
                     "/" + frame.race.totalLaps +
                     "   POS " + frame.race.position +
-                    "   " + frame.player.speedKmh.toInt() +
-                    " KM/H",
+                    "   " + frame.player.speedKmh.toInt() + " KM/H",
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )
         }
 
+        Button(
+            onClick = {
+                throttlePressed = false
+                brakePressed = false
+                steerLeftPressed = false
+                steerRightPressed = false
+                onInput(GameInput())
+                onReset()
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 2.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Black.copy(alpha = 0.58f),
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+            Text("RESET")
+        }
+
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(top = 52.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .align(Alignment.BottomStart)
+                .padding(bottom = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            HoldButton("BRAKE") { pressed ->
-                brakePressed = pressed
-                emitInput()
-            }
             HoldButton("LEFT") { pressed ->
                 steerLeftPressed = pressed
-                emitInput()
-            }
-            HoldButton("ACCEL") { pressed ->
-                throttlePressed = pressed
                 emitInput()
             }
             HoldButton("RIGHT") { pressed ->
                 steerRightPressed = pressed
                 emitInput()
             }
-            Button(
-                onClick = {
-                    throttlePressed = false
-                    brakePressed = false
-                    steerLeftPressed = false
-                    steerRightPressed = false
-                    onInput(GameInput())
-                    onReset()
-                },
-                colors = ButtonDefaults.buttonColors()
-            ) {
-                Text("RESET")
+        }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            HoldButton("BRAKE") { pressed ->
+                brakePressed = pressed
+                emitInput()
+            }
+            HoldButton("ACCEL") { pressed ->
+                throttlePressed = pressed
+                emitInput()
             }
         }
     }
@@ -122,18 +133,25 @@ private fun HoldButton(
 ) {
     Button(
         onClick = {},
-        modifier = Modifier.pointerInput(label) {
-            detectTapGestures(
-                onPress = {
-                    onStateChanged(true)
-                    try {
-                        awaitRelease()
-                    } finally {
-                        onStateChanged(false)
+        modifier = Modifier
+            .width(92.dp)
+            .pointerInput(label) {
+                detectTapGestures(
+                    onPress = {
+                        onStateChanged(true)
+                        try {
+                            awaitRelease()
+                        } finally {
+                            onStateChanged(false)
+                        }
                     }
-                }
-            )
-        }
+                )
+            },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Black.copy(alpha = 0.58f),
+            contentColor = Color.White
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Text(label)
     }

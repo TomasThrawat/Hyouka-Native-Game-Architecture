@@ -3,7 +3,7 @@
     "id": "demo_circuit",
     "name": "Demo Circuit",
     "lengthMeters": 140,
-    "halfWidthMeters": 12,
+    "halfWidthMeters": 6,
     "halfDepthMeters": 30,
     "roadModel": "builtin:road",
     "startModel": "models/start_gate.glb"
