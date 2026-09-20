@@ -6,7 +6,6 @@ buildscript {
 }
 
 apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
 
 android {
     namespace = "com.tomasthrawat.gamearchitecture"
@@ -15,7 +14,6 @@ android {
     sourceSets {
         main {
             manifest.srcFile "AndroidManifest.xml"
-            java.setSrcDirs(["src/main/java", "src/main/kotlin"])
             kotlin.srcDirs(["src/main/kotlin"])
             assets.srcDirs(["../app/src/main/assets"])
             res.srcDirs(["res"])
@@ -54,10 +52,6 @@ android {
                 signingConfigs.ciRelease.keyPassword = keyPasswordValue
             }
         }
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
     packagingOptions {
