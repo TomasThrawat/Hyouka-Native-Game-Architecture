@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.Model
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
@@ -180,81 +181,147 @@ class HyoukaGame : ApplicationAdapter() {
 
     private fun buildProceduralRoadModels() {
         val roadMaterial = Material(
-            PBRColorAttribute.createBaseColorFactor(
-                Color(0.20f, 0.22f, 0.24f, 1f)
-            )
+            PBRColorAttribute.createBaseColorFactor(Color(0.16f, 0.17f, 0.18f, 1f))
         )
         val stripeMaterial = Material(
-            PBRColorAttribute.createBaseColorFactor(
-                Color(0.92f, 0.92f, 0.88f, 1f)
-            )
+            PBRColorAttribute.createBaseColorFactor(Color(0.92f, 0.92f, 0.88f, 1f))
         )
         val curbMaterial = Material(
-            PBRColorAttribute.createBaseColorFactor(
-                Color(0.88f, 0.10f, 0.08f, 1f)
-            )
+            PBRColorAttribute.createBaseColorFactor(Color(0.88f, 0.10f, 0.08f, 1f))
         )
 
+        val points = game.track.waypoints()
+        roadModel = buildTrackStrip(points, 5.2f, 0.0f, roadMaterial, "road")
+        roadStripeModel = buildTrackStrip(points, 0.10f, 0.065f, stripeMaterial, "center")
+        roadCurbModel = buildTrackCurbs(points, 5.05f, 0.075f, curbMaterial)
+
+        manager.getRenderableProviders().add(ModelInstance(roadModel))
+        manager.getRenderableProviders().add(ModelInstance(roadStripeModel))
+        manager.getRenderableProviders().add(ModelInstance(roadCurbModel))
+    }
+
+    private fun buildTrackStrip(
+        points: List<Pair<Float, Float>>,
+        halfWidth: Float,
+        y: Float,
+        material: Material,
+        id: String
+    ): Model {
+        val builder = ModelBuilder()
+        builder.begin()
         val attributes = VertexAttributes.Usage.Position.toLong() or VertexAttributes.Usage.Normal.toLong()
-        roadModel = ModelBuilder().createBox(1f, 0.12f, 1f, roadMaterial, attributes)
-        roadStripeModel = ModelBuilder().createBox(0.18f, 0.025f, 1f, stripeMaterial, attributes)
-        roadCurbModel = ModelBuilder().createBox(0.28f, 0.08f, 1f, curbMaterial, attributes)
+        val part = builder.part(id, GL20.GL_TRIANGLES, attributes, material)
 
-        repeat(10) {
-            val road = ModelInstance(roadModel)
-            val stripe = ModelInstance(roadStripeModel)
-            val curb = ModelInstance(roadCurbModel)
-            roadInstances += road
-            roadStripeInstances += stripe
-            roadCurbInstances += curb
+        fun pointInfo(x: Float, z: Float) =
+            MeshPartBuilder.VertexInfo().setPos(x, y, z).setNor(0f, 1f, 0f)
 
-            manager.getRenderableProviders().add(road)
-            manager.getRenderableProviders().add(stripe)
-            manager.getRenderableProviders().add(curb)
+        for (i in points.indices) {
+            val prev = points[(i - 1 + points.size) % points.size]
+            val cur = points[i]
+            val next = points[(i + 1) % points.size]
+
+            val prevDx = cur.first - prev.first
+            val prevDz = cur.second - prev.second
+            val nextDx = next.first - cur.first
+            val nextDz = next.second - cur.second
+
+            val prevLen = sqrt(prevDx * prevDx + prevDz * prevDz).coerceAtLeast(0.001f)
+            val nextLen = sqrt(nextDx * nextDx + nextDz * nextDz).coerceAtLeast(0.001f)
+
+            val tx = prevDx / prevLen + nextDx / nextLen
+            val tz = prevDz / prevLen + nextDz / nextLen
+            val tLen = sqrt(tx * tx + tz * tz).coerceAtLeast(0.001f)
+            val nx = -tz / tLen
+            val nz = tx / tLen
+
+            val leftX = cur.first + nx * halfWidth
+            val leftZ = cur.second + nz * halfWidth
+            val rightX = cur.first - nx * halfWidth
+            val rightZ = cur.second - nz * halfWidth
+
+            val nextPrev = next
+            val nextNext = points[(i + 2) % points.size]
+            val ndx1 = nextPrev.first - cur.first
+            val ndz1 = nextPrev.second - cur.second
+            val ndx2 = nextNext.first - nextPrev.first
+            val ndz2 = nextNext.second - nextPrev.second
+            val l1 = sqrt(ndx1 * ndx1 + ndz1 * ndz1).coerceAtLeast(0.001f)
+            val l2 = sqrt(ndx2 * ndx2 + ndz2 * ndz2).coerceAtLeast(0.001f)
+            val ntx = ndx1 / l1 + ndx2 / l2
+            val ntz = ndz1 / l1 + ndz2 / l2
+            val ntLen = sqrt(ntx * ntx + ntz * ntz).coerceAtLeast(0.001f)
+            val nnx = -ntz / ntLen
+            val nnz = ntx / ntLen
+
+            val nextLeftX = nextPrev.first + nnx * halfWidth
+            val nextLeftZ = nextPrev.second + nnz * halfWidth
+            val nextRightX = nextPrev.first - nnx * halfWidth
+            val nextRightZ = nextPrev.second - nnz * halfWidth
+
+            part.rect(
+                pointInfo(rightX, rightZ),
+                pointInfo(leftX, leftZ),
+                pointInfo(nextLeftX, nextLeftZ),
+                pointInfo(nextRightX, nextRightZ)
+            )
         }
+
+        return builder.end()
+    }
+
+    private fun buildTrackCurbs(
+        points: List<Pair<Float, Float>>,
+        halfWidth: Float,
+        y: Float,
+        material: Material
+    ): Model {
+        val builder = ModelBuilder()
+        builder.begin()
+        val attributes = VertexAttributes.Usage.Position.toLong() or VertexAttributes.Usage.Normal.toLong()
+        val part = builder.part("curbs", GL20.GL_TRIANGLES, attributes, material)
+
+        fun info(x: Float, z: Float) =
+            MeshPartBuilder.VertexInfo().setPos(x, y, z).setNor(0f, 1f, 0f)
+
+        val curbWidth = 0.22f
+
+        for (i in points.indices) {
+            val cur = points[i]
+            val next = points[(i + 1) % points.size]
+            val dx = next.first - cur.first
+            val dz = next.second - cur.second
+            val len = sqrt(dx * dx + dz * dz).coerceAtLeast(0.001f)
+            val nx = -dz / len
+            val nz = dx / len
+
+            val lx1 = cur.first + nx * halfWidth
+            val lz1 = cur.second + nz * halfWidth
+            val lx2 = next.first + nx * halfWidth
+            val lz2 = next.second + nz * halfWidth
+            val rx1 = cur.first - nx * halfWidth
+            val rz1 = cur.second - nz * halfWidth
+            val rx2 = next.first - nx * halfWidth
+            val rz2 = next.second - nz * halfWidth
+
+            part.rect(
+                info(lx1 - nx * curbWidth, lz1 - nz * curbWidth),
+                info(lx1 + nx * curbWidth, lz1 + nz * curbWidth),
+                info(lx2 + nx * curbWidth, lz2 + nz * curbWidth),
+                info(lx2 - nx * curbWidth, lz2 - nz * curbWidth)
+            )
+            part.rect(
+                info(rx1 + nx * curbWidth, rz1 + nz * curbWidth),
+                info(rx1 - nx * curbWidth, rz1 - nz * curbWidth),
+                info(rx2 - nx * curbWidth, rz2 - nz * curbWidth),
+                info(rx2 + nx * curbWidth, rz2 + nz * curbWidth)
+            )
+        }
+
+        return builder.end()
     }
 
     private fun layoutRoad() {
-        val p = game.track.waypoints()
-        val count = min(p.size, roadInstances.size)
-
-        for (i in 0 until count) {
-            val a = p[i]
-            val b = p[(i + 1) % p.size]
-            val dx = b.first - a.first
-            val dz = b.second - a.second
-            val len = sqrt(dx * dx + dz * dz).coerceAtLeast(0.1f)
-            val yaw = Math.toDegrees(atan2(dx.toDouble(), dz.toDouble())).toFloat()
-            val cx = (a.first + b.first) * 0.5f
-            val cz = (a.second + b.second) * 0.5f
-
-            roadInstances[i].transform
-                .setToTranslation(cx, 0f, cz)
-                .rotate(Vector3.Y, yaw)
-                .scale(9.5f, 1f, len)
-
-            roadStripeInstances[i].transform
-                .setToTranslation(cx, 0.071f, cz)
-                .rotate(Vector3.Y, yaw)
-                .scale(0.12f, 1f, (len * 0.88f).coerceAtLeast(0.1f))
-
-            roadCurbInstances[i].transform
-                .setToTranslation(cx - sin(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f, 0.095f,
-                    cz + cos(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f)
-                .rotate(Vector3.Y, yaw)
-                .scale(1f, 1f, len)
-
-            val secondCurb = i + count
-            val curbRight = ModelInstance(roadCurbModel)
-            curbRight.transform
-                .setToTranslation(cx + sin(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f, 0.095f,
-                    cz - cos(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f)
-                .rotate(Vector3.Y, yaw)
-                .scale(1f, 1f, len)
-            manager.getRenderableProviders().add(curbRight)
-        }
-
-        Gdx.app.log("HyoukaGame", "Procedural road laid: $count segments")
+        Gdx.app.log("HyoukaGame", "Continuous track mesh ready")
     }
 
     override fun render() {
