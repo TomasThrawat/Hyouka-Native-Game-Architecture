@@ -1,7 +1,5 @@
 # Reusable Lessons
 
-هذه الدروس هي أساس القالب الحالي:
-
 1. بناء ألعاب Native Kotlin على Android.
 2. فصل GameRenderer عن Scene.
 3. فصل Physics وAI وRace وTrack.
@@ -18,5 +16,7 @@
 14. عدم إعادة إنشاء Engine أو ModelInstance لكل frame.
 15. إبقاء Filament JNI على main thread.
 16. التحقق من كل subsystem قبل دمجه.
-
-الهدف ليس نسخ CircuitRush3D. الهدف تحويل الدروس الهندسية المستخلصة منه إلى template reusable وقابل للتوسع.
+17. إبقاء هندسة track في مصدر واحد واستخدام نفس pose في simulation والرسم.
+18. جعل input composable من حالات مستقلة.
+19. جعل catalogs قابلة للتحقق بحيث لا تشير إلى GLB غير موجود.
+20. حقن Sound داخل Game بدل ربط core logic بتنفيذ صوتي محدد.

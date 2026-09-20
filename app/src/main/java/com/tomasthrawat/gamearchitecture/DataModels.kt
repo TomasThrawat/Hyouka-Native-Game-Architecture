@@ -12,11 +12,15 @@ data class TrackDefinition(
     val name: String,
     val lengthMeters: Float,
     val halfWidthMeters: Float,
-    val halfDepthMeters: Float
+    val halfDepthMeters: Float,
+    val roadModel: String = "builtin:road",
+    val startModel: String = "models/start_gate.glb"
 )
 
 data class CarState(
     val id: String,
+    val massKg: Float = 1200f,
+    val maxSpeedKmh: Float = 310f,
     var speedMetersPerSecond: Float = 0f,
     var progress: Float = 0f,
     var lateralOffset: Float = 0f,

@@ -1,35 +1,59 @@
 package com.tomasthrawat.gamearchitecture
 
-import kotlin.math.sin
-
 class Physics {
-    fun update(car: CarState, input: GameInput, track: TrackDefinition, dt: Float) {
+    fun update(
+        car: CarState,
+        input: GameInput,
+        track: TrackDefinition,
+        dt: Float
+    ) {
         val step = dt.coerceIn(0f, 0.05f)
         val throttle = input.throttle.coerceIn(0f, 1f)
         val brake = input.brake.coerceIn(0f, 1f)
-        val acceleration = throttle * 18f
-        val braking = brake * 30f
-        val drag = if (throttle > 0f) 0.018f else 0.55f
+        val maxSpeed = (car.maxSpeedKmh / 3.6f).coerceAtLeast(1f)
+        val speedRatio = (car.speedMetersPerSecond / maxSpeed).coerceIn(0f, 1.2f)
+        val massFactor = (1200f / car.massKg).coerceIn(0.75f, 1.25f)
 
-        car.speedMetersPerSecond += (acceleration - braking - car.speedMetersPerSecond * drag) * step
-        car.speedMetersPerSecond = car.speedMetersPerSecond.coerceIn(0f, 86f)
+        val engineAcceleration =
+            throttle * 18f * massFactor *
+                (1f - speedRatio * 0.55f).coerceAtLeast(0.2f)
+        val braking = brake * 32f
+        val rollingDrag = if (throttle > 0.01f) 0.08f else 0.42f
+        val aeroDrag =
+            car.speedMetersPerSecond * car.speedMetersPerSecond * 0.0022f
 
-        val speedFactor = (car.speedMetersPerSecond / 40f).coerceIn(0.15f, 1.5f)
-        car.yawDegrees += input.steer.coerceIn(-1f, 1f) * 95f * speedFactor * step
+        car.speedMetersPerSecond +=
+            (engineAcceleration - braking - rollingDrag - aeroDrag) * step
+        car.speedMetersPerSecond =
+            car.speedMetersPerSecond.coerceIn(0f, maxSpeed)
 
-        val yaw = Math.toRadians(car.yawDegrees.toDouble())
-        car.lateralOffset += sin(yaw).toFloat() * car.speedMetersPerSecond * step * 0.035f
-        car.lateralOffset = car.lateralOffset.coerceIn(
-            -track.halfWidthMeters + 1.2f,
-            track.halfWidthMeters - 1.2f
-        )
+        val steer = input.steer.coerceIn(-1f, 1f)
+        val lateralRate =
+            (2.6f + car.speedMetersPerSecond * 0.115f) * steer
+        car.lateralOffset += lateralRate * step
 
-        var nextProgress = car.progress + car.speedMetersPerSecond * step / track.lengthMeters
+        val trackYaw = Track(track).pose(
+            car.progress,
+            car.lateralOffset
+        ).yawDegrees
+        val steeringVisual =
+            steer * (6f + car.speedMetersPerSecond * 0.24f)
+                .coerceAtMost(18f)
+        car.yawDegrees = trackYaw + steeringVisual
+
+        var nextProgress =
+            car.progress +
+                car.speedMetersPerSecond * step /
+                track.lengthMeters.coerceAtLeast(1f)
+
         while (nextProgress >= 1f) {
             nextProgress -= 1f
             car.lap += 1
         }
+
         car.progress = nextProgress
-        if (car.speedMetersPerSecond < 0.01f) car.speedMetersPerSecond = 0f
+        if (car.speedMetersPerSecond < 0.01f) {
+            car.speedMetersPerSecond = 0f
+        }
     }
 }

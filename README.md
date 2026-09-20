@@ -1,67 +1,42 @@
 # Hyouka Native Game Architecture
 
-قالب Native Kotlin لألعاب Android، مبني على الدروس الهندسية المستخلصة من CircuitRush3D.
+قالب Native Kotlin لألعاب Android مبني على الدروس الهندسية المستخلصة من CircuitRush3D.
 
-المستودع الآن قالب تشغيل فعلي، وليس مجرد README أو skeleton.
+## الحالة الحالية
 
-## المطبق
-
-- Native Android + Kotlin.
-- فصل Game عن GameRenderer وعن Scene.
-- أنظمة مستقلة: Physics, Collision, AI, Race, Track.
-- GLB/JSON asset layer.
-- HUD مستقل عن simulation.
-- Sound subsystem مستقل.
-- Game loop على frame clock.
-- immutable GameSnapshot بين simulation والرسم.
-- unit tests للأنظمة الأساسية.
+- Native Kotlin + Android + Compose.
+- فصل simulation عن renderer وعن Scene.
+- Physics وCollision وAI وRace وTrack مستقلة.
+- GameRenderer boundary واضح، مع ComposeGameRenderer كـadapter للواجهة.
+- GameSnapshot immutable بين simulation والرسم.
+- JSON catalogs مستخدمة فعليًا لتهيئة السيارات والحلبة.
+- GLB assets حقيقية موجودة داخل app/src/main/assets/models/.
 - SceneView/Filament لطبقة 3D.
-- GitHub Actions للاختبار وبناء APK.
-
-## البنية
-
-MainActivity
- -> Game loop
- -> Game
-    -> Physics
-    -> Collision
-    -> AI
-    -> Race
-    -> Track
- -> GameSnapshot
- -> GameScene / GameRenderer
- -> GameHud
- -> Glb / JSON
- -> Sound
+- كاميرا تتبع اللاعب.
+- المسار المرئي مبني من Track.pose نفسها المستخدمة في simulation.
+- HUD يجمع حالات الأزرار بدل استبدال الإدخال كله عند كل ضغط.
+- Sound subsystem يتم حقنه في Game.
+- Unit tests للأنظمة الأساسية.
+- GitHub Actions يشغل الاختبارات ويبني debug APK.
 
 ## قاعدة التصميم
 
 الرسم لا يقرر قواعد اللعبة.
+Game ينتج GameSnapshot، ثم يعبر renderer boundary قبل أن تعرضه Scene والـHUD.
 
-Game ينتج GameSnapshot. Scene يحول snapshot إلى transforms مرئية. لذلك يمكن استبدال renderer أو GLB assets بدون إعادة كتابة الفيزياء والـAI والـRace.
+## Assets
 
-## 3D
+المشروع يحتوي على:
+- starter_car.glb
+- rival_car.glb
+- start_gate.glb
 
-القالب يحتوي على مشهد procedural يعمل بدون أي GLB، حتى يكون APK قابلًا للتشغيل قبل إضافة assets حقيقية.
-
-عند إضافة assets، ضع GLB داخل app/src/main/assets/models/ وحدد مساره في cars.json أو tracks.json. طبقة Glb تتحقق من وجود الملف ومن GLB magic header.
-
-SceneView الحالي هو 4.37.0، وتوثيقه الرسمي يوضح SceneView وModelNode وCubeNode وPlaneNode وDynamicSkyNode، إضافة إلى أن تحميل GLB يتم عبر rememberModelInstance مع إدارة lifecycle. citeturn1search0turn4search0
+Glb يتحقق من وجود الملفات ومن GLB magic header، ويقرأ cars.json وtracks.json.
 
 ## الأداء
 
-لا تنشئ Engine أو ModelInstance في كل frame. لا تضع Filament JNI أو تحميل GLB في background thread. وثائق SceneView توصي بإعادة استخدام الموارد وتجنب allocations داخل مسار الرسم. citeturn6search0
+Engine وModelInstance يتم الاحتفاظ بهما عبر Compose remember. لا يتم إنشاء Engine أو تحميل GLB لكل frame.
 
-## الملفات المهمة
+## إعادة الاستخدام
 
-- ARCHITECTURE.md
-- docs/LESSONS.md
-- app/src/main/java/.../Game.kt
-- app/src/main/java/.../Physics.kt
-- app/src/main/java/.../Ai.kt
-- app/src/main/java/.../Race.kt
-- app/src/main/java/.../Track.kt
-- app/src/main/java/.../Scene.kt
-- app/src/main/java/.../Glb.kt
-- app/src/main/java/.../HudView.kt
-- app/src/main/java/.../Sound.kt
+عند بناء لعبة جديدة، غيّر DataModels وTrack وScene وassets، واترك core rules في الأنظمة المستقلة.

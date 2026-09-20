@@ -1,3 +1,11 @@
 [
-  {"id":"demo_circuit","name":"Demo Circuit","lengthMeters":260,"halfWidthMeters":12,"halfDepthMeters":30}
+  {
+    "id": "demo_circuit",
+    "name": "Demo Circuit",
+    "lengthMeters": 140,
+    "halfWidthMeters": 12,
+    "halfDepthMeters": 30,
+    "roadModel": "builtin:road",
+    "startModel": "models/start_gate.glb"
+  }
 ]

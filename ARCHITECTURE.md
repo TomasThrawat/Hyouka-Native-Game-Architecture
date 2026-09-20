@@ -1,99 +1,54 @@
 # Architecture
 
-## 1. Simulation
+## Simulation
 
-Game هو orchestrator صغير ولا يعتمد على Compose أو Filament.
+Game orchestrates the core loop without depending on Compose or SceneView.
 
-Input -> Game -> Physics/Collision/AI/Race -> GameSnapshot
+GameInput -> Physics / Collision / AI / Race -> GameSnapshot
 
-كل subsystem له مسؤولية منفصلة.
+## Renderer boundary
 
-## 2. Renderer
+GameRenderer هو الحد الفاصل بين simulation والرسم.
+ComposeGameRenderer هو adapter صغير يحتفظ بآخر GameSnapshot داخل Compose state.
 
-GameRenderer هو boundary بين simulation والرسم.
+## Scene
 
-Scene هو طبقة 3D الفعلية. لا يجب أن يحتوي على physics أو AI أو race rules.
+Scene مسؤول عن camera follow وlighting وenvironment وworld geometry وmodel placement وتحويل GameSnapshot إلى transforms.
 
-## 3. Scene
+هندسة الطريق المرئية تستخدم Track.pose نفسها التي يستخدمها simulation.
 
-Scene مسؤول عن:
-- camera
-- lighting
-- environment
-- world geometry
-- model placement
-- تحويل GameSnapshot إلى transforms
+## Physics
 
-القالب يستخدم procedural geometry كـfallback. يمكن استبدالها بـGLB دون تغيير simulation.
+Physics يحسب acceleration وbraking وdrag وspeed cap من CarDefinition وtrack-relative steering وprogress وlap transitions.
 
-## 4. Physics
+## Collision
 
-Physics يحسب:
-- acceleration
-- braking
-- drag
-- steering
-- speed
-- progress
+Collision يحسب track bounds وbarrier response وcar overlap باستخدام طول الحلبة.
 
-## 5. Collision
+## AI
 
-Collision يحسب:
-- track bounds
-- speed response
-- car overlap
+AI ينتج GameInput للمنافسين ثم يمرره إلى Physics.
 
-## 6. AI
+## Race
 
-AI ينتج input للسيارات المنافسة ثم يمرره إلى Physics.
+Race مسؤول عن laps وposition وelapsed time وfinish state.
 
-AI لا يعدل renderer.
+## Assets
 
-## 7. Race
+Glb مسؤول عن asset existence وGLB validation وJSON catalog parsing.
 
-Race مسؤول عن:
-- laps
-- position
-- elapsed time
-- finish state
+## UI
 
-## 8. Track
+GameHud يعرض snapshot ويرسل GameInput. حالات throttle وbrake وleft وright مستقلة.
 
-Track يحول progress وlateral offset إلى world pose.
+## Sound
 
-يمكن لاحقًا استبدال التنفيذ بـspline أو checkpoints أو imported track segments.
+Sound interface مستقلة، وSilentSound هو default آمن، وGame يستخدم dependency injection.
 
-## 9. Assets
+## Testing
 
-Glb مسؤول عن:
-- asset existence
-- GLB validation
-- JSON catalog parsing
+الاختبارات تعمل على JVM بدون Android UI وتشمل acceleration وsteering وcollision وrace وtrack wrapping وcar overlap.
 
-JSON يصف البيانات. GLB يحتوي geometry/material/animation.
+## إعادة الاستخدام
 
-## 10. UI
-
-GameHud يعرض GameSnapshot ويرسل GameInput.
-
-لا يحتوي على physics أو AI.
-
-## 11. Sound
-
-Sound interface مستقلة. SilentSound يمنع إجبار القالب على شحن audio assets.
-
-## 12. Testing
-
-Physics وCollision وRace وGame قابلة للاختبار بدون Android UI.
-
-## 13. Reuse
-
-لبناء لعبة جديدة:
-1. عدّل DataModels.
-2. أضف أو استبدل systems.
-3. استبدل Track.
-4. استبدل Scene.
-5. أضف GLB وJSON وaudio assets.
-6. اترك Game rules خارج MainActivity وScene.
-
-الهدف هو نفس الدرس الهندسي الأساسي: فصل GameRenderer وScene وPhysics وAI وRace وTrack وGlb وHudView وSound.
+غيّر DataModels، ثم systems وTrack وScene وassets حسب اللعبة الجديدة، مع إبقاء game rules خارج MainActivity وScene.
