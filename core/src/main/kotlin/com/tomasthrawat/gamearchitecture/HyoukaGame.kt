@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
 import net.mgsx.gltf.loaders.glb.GLBLoader
 import net.mgsx.gltf.scene3d.lights.DirectionalLightEx
+import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute
 import net.mgsx.gltf.scene3d.scene.Scene
 import net.mgsx.gltf.scene3d.scene.SceneAsset
 import net.mgsx.gltf.scene3d.scene.SceneManager
@@ -40,6 +41,12 @@ class HyoukaGame : ApplicationAdapter() {
     private val fallbackModels = mutableListOf<Model>()
     private val cars = mutableListOf<Scene>()
     private val roads = mutableListOf<Scene>()
+    private lateinit var roadModel: Model
+    private lateinit var roadStripeModel: Model
+    private lateinit var roadCurbModel: Model
+    private val roadInstances = mutableListOf<ModelInstance>()
+    private val roadStripeInstances = mutableListOf<ModelInstance>()
+    private val roadCurbInstances = mutableListOf<ModelInstance>()
     private var trackIndex = 0
 
     override fun create() {
@@ -85,6 +92,7 @@ class HyoukaGame : ApplicationAdapter() {
         batch = SpriteBatch()
         font = BitmapFont()
         shapes = ShapeRenderer()
+        buildProceduralRoadModels()
 
         loadAssets()
         selectTrack(0)
@@ -94,13 +102,7 @@ class HyoukaGame : ApplicationAdapter() {
         val names = listOf(
             "player",
             "rival1",
-            "rival2",
-            "straight",
-            "corner90",
-            "hairpin",
-            "grandstand",
-            "tyre_wall",
-            "start_gantry"
+            "rival2"
         )
 
         val loaded = mutableMapOf<String, SceneAsset>()
@@ -175,46 +177,83 @@ class HyoukaGame : ApplicationAdapter() {
         layoutRoad()
     }
 
+    private fun buildProceduralRoadModels() {
+        val roadMaterial = Material(
+            PBRColorAttribute.createBaseColorFactor(
+                Color(0.20f, 0.22f, 0.24f, 1f)
+            )
+        )
+        val stripeMaterial = Material(
+            PBRColorAttribute.createBaseColorFactor(
+                Color(0.92f, 0.92f, 0.88f, 1f)
+            )
+        )
+        val curbMaterial = Material(
+            PBRColorAttribute.createBaseColorFactor(
+                Color(0.88f, 0.10f, 0.08f, 1f)
+            )
+        )
+
+        val attributes = VertexAttributes.Usage.Position or VertexAttributes.Usage.Normal
+        roadModel = ModelBuilder().createBox(1f, 0.12f, 1f, roadMaterial, attributes)
+        roadStripeModel = ModelBuilder().createBox(0.18f, 0.025f, 1f, stripeMaterial, attributes)
+        roadCurbModel = ModelBuilder().createBox(0.28f, 0.08f, 1f, curbMaterial, attributes)
+
+        repeat(10) {
+            val road = ModelInstance(roadModel)
+            val stripe = ModelInstance(roadStripeModel)
+            val curb = ModelInstance(roadCurbModel)
+            roadInstances += road
+            roadStripeInstances += stripe
+            roadCurbInstances += curb
+
+            manager.getRenderableProviders().add(road)
+            manager.getRenderableProviders().add(stripe)
+            manager.getRenderableProviders().add(curb)
+        }
+    }
+
     private fun layoutRoad() {
         val p = game.track.waypoints()
+        val count = min(p.size, roadInstances.size)
 
-        for (i in p.indices) {
+        for (i in 0 until count) {
             val a = p[i]
             val b = p[(i + 1) % p.size]
             val dx = b.first - a.first
             val dz = b.second - a.second
-            val len = sqrt(dx * dx + dz * dz)
-            val yaw = Math.toDegrees(
-                atan2(dx.toDouble(), dz.toDouble())
-            ).toFloat()
+            val len = sqrt(dx * dx + dz * dz).coerceAtLeast(0.1f)
+            val yaw = Math.toDegrees(atan2(dx.toDouble(), dz.toDouble())).toFloat()
+            val cx = (a.first + b.first) * 0.5f
+            val cz = (a.second + b.second) * 0.5f
 
-            roads[i % 18].modelInstance.transform
-                .setToTranslation((a.first + b.first) / 2f, 0f, (a.second + b.second) / 2f)
+            roadInstances[i].transform
+                .setToTranslation(cx, 0f, cz)
                 .rotate(Vector3.Y, yaw)
-                .scale(1f, 1f, (len / 20f).coerceIn(0.8f, 3f))
+                .scale(9.5f, 1f, len)
 
-            roads[18 + (i % 8)].modelInstance.transform
-                .setToTranslation(b.first, 0f, b.second)
+            roadStripeInstances[i].transform
+                .setToTranslation(cx, 0.071f, cz)
                 .rotate(Vector3.Y, yaw)
+                .scale(0.12f, 1f, (len * 0.88f).coerceAtLeast(0.1f))
 
-            if (i % 3 == 1) {
-                roads[26 + ((i / 3) % 6)].modelInstance.transform
-                    .setToTranslation(
-                        b.first + if (i % 2 == 0) 8f else -8f,
-                        0f,
-                        b.second
-                    )
-            }
+            roadCurbInstances[i].transform
+                .setToTranslation(cx - sin(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f, 0.095f,
+                    cz + cos(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f)
+                .rotate(Vector3.Y, yaw)
+                .scale(1f, 1f, len)
+
+            val secondCurb = i + count
+            val curbRight = ModelInstance(roadCurbModel)
+            curbRight.transform
+                .setToTranslation(cx + sin(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f, 0.095f,
+                    cz - cos(Math.toRadians(yaw.toDouble())).toFloat() * 4.7f)
+                .rotate(Vector3.Y, yaw)
+                .scale(1f, 1f, len)
+            manager.getRenderableProviders().add(curbRight)
         }
 
-        roads[32].modelInstance.transform
-            .setToTranslation(p[2].first, 0f, p[2].second)
-        roads[33].modelInstance.transform
-            .setToTranslation(p[4].first + 10f, 0f, p[4].second + 10f)
-        roads[34].modelInstance.transform
-            .setToTranslation(p[7].first - 10f, 0f, p[7].second + 10f)
-        roads[35].modelInstance.transform
-            .setToTranslation(p[0].first, 0f, p[0].second)
+        Gdx.app.log("HyoukaGame", "Procedural road laid: $count segments")
     }
 
     override fun render() {
@@ -363,5 +402,8 @@ class HyoukaGame : ApplicationAdapter() {
         batch.dispose()
         font.dispose()
         shapes.dispose()
+        roadModel.dispose()
+        roadStripeModel.dispose()
+        roadCurbModel.dispose()
     }
 }
