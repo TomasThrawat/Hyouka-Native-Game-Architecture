@@ -279,12 +279,12 @@ class DirectFilamentRenderer(
             .bufferCount(1)
             .attribute(VertexBuffer.VertexAttribute.POSITION, 0, VertexBuffer.AttributeType.FLOAT3)
             .build(engine)
-        vb.setBufferAt(engine, 0, VertexBuffer.BufferDescriptor(vertices))
+        vb.setBufferAt(engine, 0, vertices.asFloatBuffer())
         val ib = IndexBuffer.Builder()
             .indexCount(segments * 6)
             .bufferType(IndexBuffer.Builder.IndexType.USHORT)
             .build(engine)
-        ib.setBuffer(engine, IndexBuffer.BufferDescriptor(indices))
+        ib.setBuffer(engine, indices.asShortBuffer())
         return vb to ib
     }
 
