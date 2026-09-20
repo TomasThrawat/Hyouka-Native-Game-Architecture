@@ -134,7 +134,7 @@ class DirectFilamentRenderer(
             override fun onResized(width: Int, height: Int) {
                 view.viewport = Viewport(0, 0, width, height)
                 if (height > 0) {
-                    camera.setProjection(60.0, width.toDouble() / height.toDouble(), 0.05, 500.0)
+                    camera.setProjection(60.0, width.toDouble() / height.toDouble(), 0.05, 500.0, Camera.Fov.VERTICAL)
                 }
             }
         }
