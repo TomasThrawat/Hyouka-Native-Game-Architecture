@@ -10,8 +10,8 @@ android {
         applicationId = "com.tomasthrawat.gamearchitecture"
         minSdk = 24
         targetSdk = 37
-        versionCode = 3
-        versionName = "3.0"
+        versionCode = 4
+        versionName = "4.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -19,18 +19,17 @@ android {
     }
     buildFeatures { compose = true }
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
 }
-
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2026.09.00"))
     implementation("androidx.activity:activity-compose:1.12.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material3:material3")
-    implementation("io.github.sceneview:sceneview:4.37.0")
+    implementation("com.google.android.filament:filament-android:1.77.0")
+    implementation("com.google.android.filament:gltfio-android:1.77.0")
+    implementation("com.google.android.filament:filamat-android:1.77.0")
     testImplementation("junit:junit:4.13.2")
 }

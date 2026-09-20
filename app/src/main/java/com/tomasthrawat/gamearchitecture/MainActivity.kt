@@ -2,75 +2,58 @@ package com.tomasthrawat.gamearchitecture
 
 import android.content.Context
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.yield
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.addFlags(
-            android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        )
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val game = remember {
-                createGame(applicationContext)
-            }
-            val renderer = remember {
-                ComposeGameRenderer(game.snapshot)
-            }
-            var input by remember {
-                mutableStateOf(GameInput())
-            }
+            MaterialTheme {
+                val game = remember { createGame(applicationContext) }
+                val renderer = remember { DirectFilamentRenderer(applicationContext, game.track) }
+                var input by remember { mutableStateOf(GameInput()) }
 
-            LaunchedEffect(game, renderer) {
-                var lastNanos = 0L
-
-                while (isActive) {
-                    withFrameNanos { now ->
-                        val dt = if (lastNanos == 0L) {
-                            1f / 60f
-                        } else {
-                            ((now - lastNanos) / 1_000_000_000f)
-                                .coerceIn(0f, 0.05f)
-                        }
-
-                        lastNanos = now
+                LaunchedEffect(game, renderer) {
+                    var last = 0L
+                    while (isActive) {
+                        val now = System.nanoTime()
+                        val dt = if (last == 0L) 1f / 60f
+                        else ((now - last) / 1_000_000_000f).coerceIn(0.001f, 0.05f)
+                        last = now
                         game.update(input, dt)
                         renderer.render(game.snapshot)
+                        yield()
                     }
                 }
-            }
 
-            MaterialTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    GameScene(
-                        modifier = Modifier.fillMaxSize(),
-                        frame = renderer.frame,
-                        track = game.track,
-                        playerModelPath = game.playerCar.model,
-                        rivalModelPath = game.opponentCar.model
+                DisposableEffect(renderer) {
+                    onDispose { renderer.destroy() }
+                }
+
+                Box(Modifier.fillMaxSize()) {
+                    AndroidView(
+                        factory = { renderer.surfaceView },
+                        modifier = Modifier.fillMaxSize()
                     )
-
                     GameHud(
                         frame = renderer.frame,
                         onInput = { input = it },
                         onReset = {
                             game.reset()
-                            input = GameInput()
                             renderer.render(game.snapshot)
                         }
                     )
@@ -81,31 +64,12 @@ class MainActivity : ComponentActivity() {
 
     private fun createGame(context: Context): Game {
         val glb = Glb(context)
-
-        val cars = runCatching {
-            glb.readCars()
-        }.getOrDefault(emptyList())
-
-        val tracks = runCatching {
-            glb.readTracks()
-        }.getOrDefault(emptyList())
-
+        val cars = runCatching { glb.readCars() }.getOrDefault(emptyList())
+        val tracks = runCatching { glb.readTracks() }.getOrDefault(emptyList())
         val fallback = Game()
-
-        val player =
-            cars.firstOrNull { it.id == "starter_car" }
-                ?: fallback.playerCar
-        val rival =
-            cars.firstOrNull { it.id == "rival_car" }
-                ?: fallback.opponentCar
-        val trackDefinition =
-            tracks.firstOrNull()
-                ?: fallback.track.definition
-
-        return Game(
-            track = Track(trackDefinition),
-            playerCar = player,
-            opponentCar = rival
-        )
+        val player = cars.firstOrNull { it.id == "starter_car" } ?: fallback.playerCar
+        val rival = cars.firstOrNull { it.id == "rival_car" } ?: fallback.opponentCar
+        val track = tracks.firstOrNull() ?: fallback.track
+        return Game(track = Track(track), playerCar = player, opponentCar = rival)
     }
 }
