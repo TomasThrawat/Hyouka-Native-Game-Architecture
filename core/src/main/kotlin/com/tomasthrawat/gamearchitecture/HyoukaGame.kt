@@ -27,6 +27,7 @@ import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -194,7 +195,7 @@ class HyoukaGame : ApplicationAdapter() {
             )
         )
 
-        val attributes = VertexAttributes.Usage.Position or VertexAttributes.Usage.Normal
+        val attributes = VertexAttributes.Usage.Position.toLong() or VertexAttributes.Usage.Normal.toLong()
         roadModel = ModelBuilder().createBox(1f, 0.12f, 1f, roadMaterial, attributes)
         roadStripeModel = ModelBuilder().createBox(0.18f, 0.025f, 1f, stripeMaterial, attributes)
         roadCurbModel = ModelBuilder().createBox(0.28f, 0.08f, 1f, curbMaterial, attributes)
