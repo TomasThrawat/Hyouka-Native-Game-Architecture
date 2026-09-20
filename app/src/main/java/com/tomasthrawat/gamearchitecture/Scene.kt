@@ -19,7 +19,6 @@ import io.github.sceneview.rememberMainLightNode
 import io.github.sceneview.rememberMaterialLoader
 import io.github.sceneview.rememberModelInstance
 import io.github.sceneview.rememberModelLoader
-import io.github.sceneview.utils.colorOf
 
 private const val ROAD_TILES = 20
 
@@ -111,21 +110,21 @@ fun GameScene(
 
     val groundMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            colorOf(Color(0.06f, 0.15f, 0.08f, 1f)),
+            Color(0.06f, 0.15f, 0.08f, 1f),
             metallic = 0f,
             roughness = 0.96f
         )
     }
     val roadMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            colorOf(Color(0.055f, 0.06f, 0.07f, 1f)),
+            Color(0.055f, 0.06f, 0.07f, 1f),
             metallic = 0f,
             roughness = 0.92f
         )
     }
     val kerbMaterial = remember(materialLoader) {
         materialLoader.createColorInstance(
-            colorOf(Color(0.72f, 0.05f, 0.04f, 1f)),
+            Color(0.72f, 0.05f, 0.04f, 1f),
             metallic = 0f,
             roughness = 0.72f
         )
