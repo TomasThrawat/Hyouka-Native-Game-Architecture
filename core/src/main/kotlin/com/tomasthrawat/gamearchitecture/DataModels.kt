@@ -10,7 +10,7 @@ data class CarDefinition(
 data class TrackDefinition(
     val id: String = "demo_circuit",
     val name: String = "Demo Circuit",
-    val lengthMeters: Float = 140f,
+    val lengthMeters: Float = 430f,
     val halfWidthMeters: Float = 6f,
     val halfDepthMeters: Float = 30f
 )
