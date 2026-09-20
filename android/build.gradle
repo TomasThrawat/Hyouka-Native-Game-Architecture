@@ -15,7 +15,7 @@ android {
         main {
             manifest.srcFile "AndroidManifest.xml"
             kotlin.srcDirs(["src/main/kotlin"])
-            assets.srcDirs(["../app/src/main/assets"])
+            assets.srcDirs(["../core/assets", "../app/src/main/assets"])
             res.srcDirs(["res"])
             jniLibs.srcDirs(["libs"])
         }
