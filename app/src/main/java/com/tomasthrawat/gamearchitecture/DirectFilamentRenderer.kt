@@ -1,1 +1,298 @@
-cGFja2FnZSBjb20udG9tYXN0aHJhd2F0LmdhbWVhcmNoaXRlY3R1cmUKCmltcG9ydCBhbmRyb2lkLmNvbnRlbnQuQ29udGV4dAppbXBvcnQgYW5kcm9pZC5vcGVuZ2wubWF0cml4Lk1hdHJpeAppbXBvcnQgYW5kcm9pZC52aWV3LlN1cmZhY2UKaW1wb3J0IGFuZHJvaWQudmlldy5TdXJmYWNlVmlldwppbXBvcnQgY29tLmdvb2dsZS5hbmRyb2lkLmZpbGFtZW50LioKaW1wb3J0IGNvbS5nb29nbGUuYW5kcm9pZC5maWxhbWVudC5hbmRyb2lkLlVpSGVscGVyCmltcG9ydCBjb20uZ29vZ2xlLmFuZHJvaWQuZmlsYW1lbnQuZmlsYW1hdC5NYXRlcmlhbEJ1aWxkZXIKaW1wb3J0IGNvbS5nb29nbGUuYW5kcm9pZC5maWxhbWVudC5nbHRmaW8uQXNzZXRMb2FkZXIKaW1wb3J0IGNvbS5nb29nbGUuYW5kcm9pZC5maWxhbWVudC5nbHRmaW8uRmlsYW1lbnRBc3NldAppbXBvcnQgY29tLmdvb2dsZS5hbmRyb2lkLmZpbGFtZW50LmdsdGZpby5SZXNvdXJjZUxvYWRlcgppbXBvcnQgY29tLmdvb2dsZS5hbmRyb2lkLmZpbGFtZW50LmdsdGZpby5VYmVyc2hhZGVyUHJvdmlkZXIKaW1wb3J0IGphdmEubmlvLkJ5dGVCdWZmZXIKaW1wb3J0IGtvdGxpbi5tYXRoLmNvcwppbXBvcnQga290bGluLm1hdGguc2luCgpjbGFzcyBEaXJlY3RGaWxhbWVudFJlbmRlcmVyKGNvbnRleHQ6IENvbnRleHQsIHByaXZhdGUgdmFsIHRyYWNrOiBUcmFjaykgOiBHYW1lUmVuZGVyZXIgewogICAgdmFsIHN1cmZhY2VWaWV3ID0gU3VyZmFjZVZpZXcoY29udGV4dCkKICAgIHByaXZhdGUgdmFyIGluaXRpYWxpemVkID0gZmFsc2UKICAgIHByaXZhdGUgdmFyIGZyYW1lID0gR2FtZVNuYXBzaG90KENhckZyYW1lKCJwbGF5ZXIiLCAwZiwgMGYsIDBmLCAwZiwgMGYpLCBlbXB0eUxpc3QoKSwgUmFjZUZyYW1lKDAsIDMsIDEsIGZhbHNlLCAwZikpCiAgICBwcml2YXRlIGxhdGUgaW5pdGlhbGl6ZWQgZW5naW5lOiBFbmdpbmUKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCByZW5kZXJlcjogUmVuZGVyZXIKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCBzY2VuZTogU2NlbmUKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCB2aWV3OiBWaWV3CiAgICBwcml2YXRlIGxhdGUgaW5pdGlhbGl6ZWQgY2FtZXJhOiBDYW1lcmEKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCB1aUhlbHBlcjogVWlIZWxwZXIKICAgIHByaXZhdGUgdmFyIHN3YXBDaGFpbjogU3dhcENoYWluPyA9IG51bGwKICAgIHByaXZhdGUgdmFsIG1hdGVyaWFsUHJvdmlkZXIgPSBVYmVyc2hhZGVyUHJvdmlkZXIKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCBhc3NldExvYWRlcjogQXNzZXRMb2FkZXIKICAgIHByaXZhdGUgbGF0ZSBpbml0aWFsaXplZCByZXNvdXJjZUxvYWRlcjogUmVzb3VyY2VMb2FkZXIKICAgIHByaXZhdGUgdmFsIGFzc2V0cyA9IG11dGFibGVNYXBPZjxTdHJpbmcsIEZpbGFtZW50QXNzZXM+KCkKICAgIHByaXZhdGUgdmFsIG1hdHJpY2VzID0gbXV0YWJsZU1hcE9mPFN0cmluZywgRmxvYXRBcnJheT4oKQogICAgcHJpdmF0ZSB2YWwgcm9hZE1hdGVyaWFsOiBNYXRlcmlhbAogICAgcHJpdmF0ZSB2YWwgcm9hZEluc3RhbmNlOiBNYXRlcmlhbEluc3RhbmNlCiAgICBwcml2YXRlIHZhbCByb2FkVmVydGV4QnVmZmVyOiBWZXJ0ZXhCdWZmZXIKICAgIHByaXZhdGUgdmFsIHJvYWRJbmRleEJ1ZmZlcjogSW5kZXhCdWZmZXIKICAgIHByaXZhdGUgdmFsIHJvYWRFbnRpdHk6IEludAogICAgcHJpdmF0ZSB2YWwgbGluZU1hdGVyaWFsOiBNYXRlcmlhbAogICAgcHJpdmF0ZSB2YWwgbGluZUluc3RhbmNlOiBNYXRlcmlhbEluc3RhbmNlCiAgICBwcml2YXRlIHZhbCBsaW5lVmVydGV4QnVmZmVyOiBWZXJ0ZXhCdWZmZXIKICAgIHByaXZhdGUgdmFsIGxpbmVJbmRleEJ1ZmZlcjogSW5kZXhCdWZmZXIKICAgIHByaXZhdGUgdmFsIGxpbmVFbnRpdHk6IEludAoKICAgIGluaXQgewogICAgICAgIHRyeSB7CiAgICAgICAgICAgIEZpbGFtZW50LmluaXQoKQogICAgICAgICAgICBNYXRlcmlhbEJ1aWxkZXIuaW5pdCgpCiAgICAgICAgICAgIGluaXRpYWxpemVkID0gdHJ1ZQogICAgICAgICAgICBlbmdpbmUgPSBFbmdpbmUuY3JlYXRlKEVuZ2luZS5CYWNrZW5kLk9QRU5HTCkKICAgICAgICAgICAgcmVuZGVyZXIgPSBlbmdpbmUuY3JlYXRlUmVuZGVyZXIoKQogICAgICAgICAgICBzY2VuZSA9IGVuZ2luZS5jcmVhdGVTY2VuZSgpCiAgICAgICAgICAgIHZpZXcgPSBlbmdpbmUuY3JlYXRlVmlldygpCiAgICAgICAgICAgIGNhbWVyYSA9IGVuZ2luZS5jcmVhdGVDYW1lcmAoZW5naW5lLmVudGl0eU1hbmFnZXIuY3JlYXRlKCkpCiAgICAgICAgICAgIHZpZXcuc2NlbmUgPSBzY2VuZQogICAgICAgICAgICB2aWV3LmNhbWVyYSA9IGNhbWVyYQogICAgICAgICAgICBtYXRlcmlhbFByb3ZpZGVyID0gVWJlcnNoYWRlclByb3ZpZGVyKGVuZ2luZSkKICAgICAgICAgICAgYXNzZXRMb2FkZXIgPSBBc3NldExvYWRlcihlbmdpbmUsIG1hdGVyaWFsUHJvdmlkZXIsIEVudGl0eU1hbmFnZXIuZ2V0KCkpCiAgICAgICAgICAgIHJlc291cmNlTG9hZGVyID0gUmVzb3VyY2VMb2FkZXIoZW5naW5lLCB0cnVlKQogICAgICAgICAgICB2YWwgbGlnaHQgPSBFbnRpdHlNYW5hZ2VyLmdldCgpLmNyZWF0ZSgpCiAgICAgICAgICAgIExpZ2h0TWFuYWdlci5CdWlsZGVyKExpZ2h0TWFuYWdlci5UeXBlLkRJUkVDVElPTkFMKS5jb2xvcigxLjBmLCAwLjk0ZiwgMC44OGYpLmludGVuc2l0eSgxMDBfMDAwLjBmKS5kaXJlY3Rpb24oMC41ZiwgLTEuMGYsIC0wLjdmKS5jYXN0U2hhZG93cyh0cnVlKS5idWlsZChlbmdpbmUsIGxpZ2h0KQogICAgICAgICAgICBzY2VuZS5hZGRFbnRpdHkobGlnaHQpCiAgICAgICAgICAgIHNjZW5lLnNreWJveCA9IFNreWJveC5CdWlsZGVyKCkuY29sb3IoMC4wMjVmLCAwLjA0NWYsIDAuMDc1ZiwgMS4wZikucnVp bGQoZW5naW5lKQogICAgICAgICAgICB2YWwgcm9hZCA9IGJ1aWxkQ29sb3JNYXRlcmlhbCgicm9hZCIsIDAuMDQ1ZiwgMC4wNTJmLCAwLjA2NWYsIDEuMGYpCiAgICAgICAgICAgIHJvYWRNYXRlcmlhbCA9IHJvYWQuZmlyc3QKICAgICAgICAgICAgcm9hZEluc3RhbmNlID0gcm9hZC5zZWNvbmQKICAgICAgICAgICAgdmFsIHJvYWRNZXNoID0gYnVpbGRTdHJpcE1lc2godHJhY2ssIHRyYWNrLmRlZmluaXRpb24uaGFsZldpZHRoTWV0ZXJzLCBST0FEX1NFR01FTlRTKQogICAgICAgICAgICByb2FkVmVydGV4QnVmZmVyID0gcm9hZE1lc2guZmlyc3QKICAgICAgICAgICAgcm9hZEluZGV4QnVmZmVyID0gcm9hZE1lc2guc2Vjb25kCiAgICAgICAgICAgIHJvYWRFbnRpdHkgPSBFbnRpdHlNYW5hZ2VyLmdldCgpLmNyZWF0ZSgpCiAgICAgICAgICAgIFJlbmRlcmFibGVNYW5hZ2VyLkJ1aWxkZXIoMSkuYm91bmRpbmdCb3goQm94KC04MGYsIC0wLjJmLCAtODBmLCA4MGYsIDAuMmYsIDgwZikpLmdlb21ldHJ5KDAsIFJlbmRlcmFibGVNYW5hZ2VyLlByaW1pdGl2ZVR5cGUuVFJJQU5HTEVTLCByb2FkVmVydGV4QnVmZmVyLCByb2FkSW5kZXhCdWZmZXIpLm1hdGVyaWFsKDAsIHJvYWRJbnN0YW5jZSkuY3VsbGluZyhmYWxzZSkucmVjZWl2ZVNoYWRvd3ModHJ1ZSkuYnVpbGQoZW5naW5lLCByb2FkRW50aXR5KQogICAgICAgICAgICBzY2VuZS5hZGRFbnRpdHkocm9hZEVudGl0eSkKICAgICAgICAgICAgdmFsIGxpbmUgPSBidWlsZENvbG9yTWF0ZXJpYWwoImNlbnRlci1saW5lIiwgMC45MmYsIDAuODJmLCAwLjI4ZiwgMS4wZikKICAgICAgICAgICAgbGluZU1hdGVyaWFsID0gbGluZS5maXJzdAogICAgICAgICAgICBsaW5lSW5zdGFuY2UgPSBsaW5lLnNlY29uZAogICAgICAgICAgICB2YWwgbGluZU1lc2ggPSBidWlsZFN0cmlwTWVzaCh0cmFjaywgMC4wNTVmLCBST0FEX1NFR01FTlRTKQogICAgICAgICAgICBsaW5lVmVydGV4QnVmZmVyID0gbGluZU1lc2guZmlyc3QKICAgICAgICAgICAgbGluZUluZGV4QnVmZmVyID0gbGluZU1lc2guc2Vjb25kCiAgICAgICAgICAgIGxpbmVFbnRpdHkgPSBFbnRpdHlNYW5hZ2VyLmdldCgpLmNyZWF0ZSgpCiAgICAgICAgICAgIFJlbmRlcmFibGVNYW5hZ2VyLkJ1aWxkZXIoMSkuYm91bmRpbmdCb3goQm94KC04MGYsIC0wLjAxZiwgLTgwZiwgODBmLCAwLjA1ZiwgODBmKSkuZ2VvbWV0cnkoMCwgUmVuZGVyYWJsZU1hbmFnZXIuUHJpbWl0aXZlVHlwZS5UUklBTkdMRVMsIGxpbmVWZXJ0ZXhCdWZmZXIsIGxpbmVJbmRleEJ1ZmZlciku bWF0ZXJpYWwoMCwgbGluZUluc3RhbmNlKS5jdWxsaW5nKGZhbHNlKS5idWlsZChlbmdpbmUsIGxpbmVFbnRpdHkpCiAgICAgICAgICAgIHNjZW5lLmFkZEVudGl0eShsaW5lRW50aXR5KQogICAgICAgICAgICB1aUhlbHBlciA9IFVpSGVscGVyKFVpSGVscGVyLkNvbnRleHRFcnJvclBvbGljeS5ET05UX0NIRUNLKQogICAgICAgICAgICB1aUhlbHBlci5yZW5kZXJDYWxsYmFjayA9IG9iamVjdCA6IFVpSGVscGVyLlJlbmRlcmVyQ2FsbGJhY2sgewogICAgICAgICAgICAgICAgb3ZlcnJpZGUgZnVuIG9uTmF0aXZlV2luZG93Q2hhbmdlZChzdXJmYWNlOiBTdXJmYWNlKSB7IHN3YXBDaGFpbiA/LmxldCB7IGVuZ2luZS5kZXN0cm95U3dhcENoYWluKGl0KSB9OyBzd2FwQ2hhaW4gPSBydW5DYXRjaGVkIHsgZW5naW5lLmNyZWF0ZVN3YXBDaGFpbihzdXJmYWNlKSB9LmdldE9yTnVsbCB9CiAgICAgICAgICAgICAgICBvdmVycmlkZSBmdW4gb25EZXRhY2hlZEZyb21TdXJmYWNlKCkgeyBzd2FwQ2hhaW4/LmxldCB7IGVuZ2luZS5kZXN0cm95U3dhcENoYWluKGl0KSB9OyBzd2FwQ2hhaW4gPSBudWxsIH0KICAgICAgICAgICAgICAgIG92ZXJyaWRlIGZ1biBvblJlc2l6ZWQod2lkdGg6IEludCwgaGVpZ2h0OiBJbnQpIHsgaWYgKGhlaWdodCA+IDApIHsgdmlldy52aWV3cG9ydCA9IFZpZXdwb3J0KDAsIDAsIHdpZHRoLCBoZWlnaHQpOyBjYW1lcmEuc2V0UHJvamVjdGlvbig2MC4wLCB3aWR0aC50b0RvdWJsZSgpIC8gaGVpZ2h0LnRvRG91YmxlKCksIDAuMDUsIDUwMC4wLCBDYW1lcmEuRm92LlZFUlRJQ0FMKSB9IH0KICAgICAgICAgICAgfQogICAgICAgICAgICB1aUhlbHBlci5hdHRhY2hUbyhzdXJmYWNlVmlldykKICAgICAgICB9IGNhdGNoICh0OiBUaHJvd2FibGUpIHsKICAgICAgICAgICAgbG9naW5pdCA9IGZhbHNlCiAgICAgICAgfQogICAgfQoKICAgIG92ZXJyaWRlIGZ1biByZW5kZXIoZnJhbWU6IEdhbWVTbmFwc2hvdCkgewogICAgICAgIHRoaXMuZnJhbWUgPSBmcmFtZQogICAgICAgIGlmICghaW5pdGlhbGl6ZWQgfHwgdWlIZWxwZXIuaXNSZWFkeVRvUmVuZGVyICE9IHRydWUpIHJldHVybgogICAgICAgIHVwZGF0ZUFzc2V0VHJhbnNmb3JtcyhmcmFtZSkKICAgICAgICB1cGRhdGVDYW1lcmEoZnJhbWUpCiAgICAgICAgdmFsIHN3YXAgPSBzd2FwQ2hhaW4gPzogcmV0dXJuCiAgICAgICAgcnVuQ2F0Y2hlZCB7IGlmIChyZW5kZXJlci5iZWdpbkZyYW1lKHN3YXAsIFN5c3RlbS5uYW5vVGltZSgpKSB7IHJlbmRlcmVyLnJlbmRlcijdmlldyEpfSByZW5kZXJlci5lbmRGcmFtZSgpIH0KICAgIH0KICAgIHByaXZhdGUgZnVuIHVwZGF0ZUFzc2V0VHJhbnNmb3JtcyhmcmFtZTogR2FtZVNuYXBzaG90KSB7IHRyYW5zZm9ybSgicGxheWVyIiwgZnJhbWUucGxheWVyLnByb2dyZXNzLCBmcmFtZS5wbGF5ZXIubGF0ZXJhbE9mZnNldCwgZnJhbWUucGxheWVyLnlhd0RlZ3JlZXMsIDIuMmYpOyBmcmFtZS5vcHBvbmVudHMuZm9yRWFjaEluZGV4ZWQgeyBpLCBjIC0+IHRyYW5zZm9ybSgicml2YWxfJGkiLCBjLnByb2dyZXNzLCBjLmxhdGVyYWxPZmZzZXQsIGMueWF3RGVncmVlcywgMi4wZikgfTsgZmluYWxpemVQZW5kaW5nQXNzZXRzKCkKICAgIH0KICAgIHByaXZhdGUgZnVuIHRyYW5zZm9ybShpZDogU3RyaW5nLCBwcm9ncmVzczogRmxvYXQsIGxhdGVyYWw6IEZsb2F0LCB5YXc6IEZsb2F0LCBzY2FsZTogRmxvYXQpIHsKICAgICAgICB2YWwgYXNzZXQgPSBhc3NldHNbaWRdID8/ IHJldHVybgogICAgICAgIHZhbCBwb3NlID0gdHJhY2sucG9zZShwcm9ncmVzcywgbGF0ZXJhbCkKICAgICAgICB2YWwgbWF0cml4ID0gbWF0cmljZXMuZ2V0T3JQdXQoaWQpIHsgRmxvYXRBcnJheSgxNikgfQogICAgICAgIE1hdHJpeC5zZXRJZGVudGl0eU0obWF0cml4LCAwKTsgTWF0cml4LnRyYW5zbGF0ZU0obWF0cml4LCAwLCBwb3NlLngsIDAuMDJmLCBwb3NlLnosIDApOyBNYXRyaXgucm90YXRlTShtYXRyaXgsIDAsIHlhdywgMCwgMSwgMCk7IE1hdHJpeC5zY2FsZU0obWF0cml4LCAwLCBzY2FsZSwgc2NhbGUsIHNjYWxlKTsgZW5naW5lLnRyYW5zZm9ybU1hbmFnZXIuc2V0VHJhbnNmb3JtKGVuZ2luZS50cmFuc2Zvcm1NYW5hZ2VyLmdldEluc3RhbmNlKGFzc2V0LnJvb3QpLCBtYXRyaXgpCiAgICB9CiAgICBwcml2YXRlIGZ1biBmaW5hbGl6ZVBlbmRpbmdBc3NldHMoKSB7IHJlc291cmNlTG9hZGVyLmFzeW5jVXBkYXRlTG9hZCgpOyBhc3NldHMudmFsdWVzLmZvckVhY2ggeyBhIC0+IHZhciByID0gYXNzZXQucG9wUmVuZGVyYWJsZXMocmVhZHkpOyB3aGlsZSAociA+IDApIHsgc2NlbmUuYWRkRW50aXRpZXMoci5jb3B5T2YoKS5hbHNvIHsgciA9IGFzc2V0LnBvcFJlbmRlcmFibGVzKHJlYWR5KSB9IH0gc2NlbmUuYWRkRW50aXRpZXMoYS5saWdodEVudGl0aWVzKSB9IH0KICAgIGZ1biBsb2FkTW9kZWwoaWQ6IFN0cmluZywgcGF0aDogU3RyaW5nKSB7IHJ1bkNhdGNoZWQgeyBpZiAoYXNzZXRzLmNvbnRhaW5zS2V5KGlkKSkgcmV0dXJuOyB2YWwgYSA9IHN1cmZhY2VWaWV3LmNvbnRleHQuYXNzZXRzLm9wZW4ocGF0aCkudXNlIHsgaXQucmVhZEJ5dGVzKCkgfTsgdmFsIGZpbGFtZW50QXNzZXQgPSBhc3NldExvYWRlci5jcmVhdGVBc3NldChCeXRlQnVmZmVyLndyYXAoYSkpID8/ IHJldHVybjsgcmVzb3VyY2VMb2FkZXIuYXN5bmNCZWdpbkxvYWQoZmlsYW1lbnRBc3NldCk7IGZpbGFtZW50QXNzLnJlbGVhc2VTb3VyY2VEYXRhKCk7IGFzc2V0c1tpZF0gPSBmaWxhbWVudEFzc2V0IH0KICAgIGZ1biBkZXN0cm95KCkgeyBydW5DYXRjaGVkIHsgdWlIZWxwZXIuZGV0YWNoKCk7IHN3YXBDaGFpbiA/LmxldCB7IGVuZ2luZS5kZXN0cm95U3dhcENoYWluKGl0KSB9OyBhc3NldHMudmFsdWVzLmZvckVhY2ggeyBzY2VuZS5yZW1vdmVFbnRpdGllcyhpdC5lbnRpdGllcyk7IGFzc2V0TG9hZGVyLmRlc3Ryb3lBc3NldChpdCkgfTsgYXNzZXRzLmNsZWFyKCk7IHJ1bkNhdGNoZWQgeyBlbmdpbmUuZGVzdHJveVJlbmRlcmVyKHJlbmRlcmVyKTsgZW5naW5lLmRlc3Ryb3lWaWV3KHZpZXcpOyBlbmdpbmUuZGVzdHJveVNjZW5lKHNjZW5lKTsgZW5naW5lLmRlc3Ryb3lDYW1lcmFDb21wb25lbnQoY2FtZXJhLmVudGl0eSk7IEVudGl0eU1hbmFnZXIuZ2V0KCkuZGVzdHJveShjYW1lcmEuZW50aXR5KTsgZW5naW5lLmRlc3Ryb3lWZXJ0ZXhCdWZmZXIocm9hZFZlcnRleEJ1ZmZlcik7IGVuZ2luZS5kZXN0cm95SW5kZXhCdWZmZXIocm9hZEluZGV4QnVmZmVyKTsgZW5naW5lLmRlc3Ryb3lNYXRlcmlhbEluc3RhbmNlKHJvYWRJbnN0YW5jZSk7IGVuZ2luZS5kZXN0cm95TWF0ZXJpYWwocm9hZE1hdGVyaWFsKTsgZW5naW5lLmRlc3Ryb3lWZXJ0ZXhCdWZmZXIobGluZVZlcnRleEJ1ZmZlcik7IGVuZ2luZS5kZXN0cm95SW5kZXhCdWZmZXIobGluZUluZGV4QnVmZmVyKTsgZW5naW5lLmRlc3Ryb3lNYXRlcmlhbEluc3RhbmNlKGxpbmVJbnN0YW5jZSk7IGVuZ2luZS5kZXN0cm95TWF0ZXJpYWwobGluZU1hdGVyaWFsKTsgcmVzb3JjZUxvYWRlci5kZXN0cm95KCk7IGFzc2V0TG9hZGVyLmRlc3Ryb3koKTsgbWF0ZXJpYWxQcm92aWRlci5kZXN0cm95TWF0ZXJpYWxzKCk7IGVuZ2luZS5kZXN0cm95RW5naW5lKGVuZ2luZSk7IE1hdGVyaWFsQnVpbGRlci5zaHV0ZG93bigpIH0gfQoKICAgIHByaXZhdGUgZnVuIGJ1aWxkQ29sb3JNYXRlcmlhbChuYW1lOiBTdHJpbmcsIHI6IEZsb2F0LCBnOiBGbG9hdCwgYjogRmxvYXQsIGE6IEZsb2F0KTogUGFpcjxNYXRlcmlhbCwgTWF0ZXJpYWxJbnN0YW5jZT4geyB2YWwgcGtnID0gTWF0ZXJpYWxCdWlsZGVyKCkubmFtZShuYW1lKS5wbGF0Zm9ybShNYXRlcmlhbEJ1aWxkZXIuUGxhdGZvcm0uTU9CSUxFKS50YXJnZXRBcGkoTWF0ZXJpYWxCdWlsZGVyLlRhcmdldEFwaS5PUEVOR0wpLnNoYWRpbmcoTWF0ZXJpYWxCdWlsZGVyLlNoYWRpbmcuVU5MSVQpLnVuaWZvcm1QYXJhbWV0ZXIoTWF0ZXJpYWxCdWlsZGVyLlVuaWZvcm1UeXBlLkZMT0FUNDAsICJjb2xvciIpLm1hdGVyaWFsKCJ2b2lkIG1hdGVyaWFsKGlub3V0IE1hdGVyaWFsSW5wdXRzIG1hdGVyaWFsKSB7IHByZXBhcmVNYXRlcmlhbChtYXRlcmlhbCk7IG1hdGVyaWFsLmJhc2VDb2xvciA9IG1hdGVyaWFsUGFyYW1zLmNvbG9yOyB9IikuYnVpbGQoZW5naW5lKTsgdmFsIG1hdGVyaWFsID0gTWF0ZXJpYWwuQnVpbGRlcigpLnBheWxvYWQocGtnLmJ1ZmZlciwgcGtnLmJ1ZmZlci5yZW1haW5pbmcoKSkuYnVpbGQoZW5naW5lKTsgdmFsIGluc3RhbmNlID0gbWF0ZXJpYWwuY3JlYXRlSW5zdGFuY2UoKTsgaW5zdGFuY2Uuc2V0UGFyYW1ldGVyKCJjb2xvciIsIHIsIGcsIGIsIGEpOyByZXR1cm4gbWF0ZXJpYWwgdG8gaW5zdGFuY2UgfQogICAgcHJpdmF0ZSBmdW4gYnVpbGRTdHJpcE1lc2godHJhY2s6IFRyYWNrLCBoYWxmV2lkdGg6IEZsb2F0LCBzZWdtZW50czogSW50KTogUGFpcjxWZXJ0ZXhCdWZmZXIsIEluZGV4QnVmZmVyPiB7IHZhbCB2ZXJ0aWNlcyA9IEJ5dGVCdWZmZXIuYWxsb2NhdGVEaXJlY3Qoc2VnbWVudHMgKiAyICogMyAqIDQpLm9yZGVyKGphdmEubmlvLkJ5dGVPcmRlci5uYXRpdmVPcmRlcigpKTsgdmFsIGluZGljZXMgPSBCeXRlQnVmZmVyLmFsbG9jYXRlRGlyZWN0KHNlZ21lbnRzICogNiAqIDIpLm9yZGVyKGphdmEubmlvLkJ5dGVPcmRlci5uYXRpdmVPcmRlcigpKTsgcmVwZWF0KHNlZ21lbnRzKSB7IGkgLT4gdmFsIHAgPSBpLnRvRmxvYXQoKSAvIHNlZ21lbnRzOyB2YWwgYSA9IHRyYWNrLnBvc2UocCwgLWhhbGZXaWR0aCk7IHZhbCBiID0gdHJhY2sucG9zZShwLCBoYWxmV2lkdGgpOyB2ZXJ0aWNlcy5wdXRGbG9hdChhLngpLnB1dEZsb2F0KDBmKS5wdXRGbG9hdChhLnosKTsgdmVydGljZXMucHV0RmxvYXQoYi54KS5wdXRGbG9hdCgwZikucHV0RmxvYXQoYi5aKTsgdmFsIGogPSAoaSAqIDIpLnRvU2hvcnQoKTsgdmFsIG4gPSAoKChpICsgMSkgJSBzZWdtZW50cykgKiAyKS50b1Nob3J0KCk7IGluZGljZXMucHV0U2hvcnRqKS5wdXRTaG9ydChuKS5wdXRTaG9ydChtICsgMSkuZXRvU2hvcnQoKSk7IGluZGljZXMucHV0U2hvcnRqKCkuaS5wb3BTaG9ydCgpIH0gdmVydGljZXMuZmxpcCgpOyBpbmRpY2VzLmZsaXAoKTsgdmFsIHZiID0gVmVydGV4QnVmZmVyLkJ1aWxkZXIoKS52ZXJ0ZXhDb3VudChzZWdtZW50cyAqIDIpLmJ1ZmZlckNvdW50KDEpLmF0dHJpYnV0ZShWZXJ0ZXhCdWZmZXIuVmVydGV4QXR0cmlidXRlLlBPU0lUSU9OLCAwLCBWZXJ0ZXhCdWZmZXIuQXR0cmlidXRlVHlwZS5GTE9BVDMpLmJ1aWxkKGVuZ2luZSk7IHZiLnNldEJ1ZmZlckF0KGVuZ2luZSwgMCwgdmVydGljZXMuYXNGbG9hdEJ1ZmZlcigpKTsgdmFsIGliID0gSW5kZXhCdWZmZXIuQnVpbGRlcigpLmluZGV4Q291bnQoc2VnbWVudHMgKiA2KS5idWZmZXJUeXBlKEluZGV4QnVmZmVyLkJ1aWxkZXIuSW5kZXhUeXBlLlVTSE9SVCkuYnVpbGQoZW5naW5lKTsgaWIuc2V0QnVmZmVyKGVuZ2luZSwgaW5kaWNlcy5hc1Nob3J0QnVmZmVyKCkpOyByZXR1cm4gdmIgdG8gaWIgfQogICAgY29tcGFuaW9uIG9iamVjdCB7IHByaXZhdGUgY29uc3QgUk9BRF9TRUdNRU5UUyA9IDk2IH0KfQ==
+package com.tomasthrawat.gamearchitecture
+
+import android.content.Context
+import android.opengl.Matrix
+import android.view.Surface
+import android.view.SurfaceView
+import com.google.android.filament.*
+import com.google.android.filament.android.UiHelper
+import com.google.android.filament.filamat.MaterialBuilder
+import com.google.android.filament.gltfio.AssetLoader
+import com.google.android.filament.gltfio.FilamentAsset
+import com.google.android.filament.gltfio.ResourceLoader
+import com.google.android.filament.gltfio.UbershaderProvider
+import java.nio.ByteBuffer
+import kotlin.math.cos
+import kotlin.math.sin
+
+class DirectFilamentRenderer(
+    context: Context,
+    private val track: Track
+) : GameRenderer {
+    val surfaceView = SurfaceView(context)
+    var frame: GameSnapshot = GameSnapshot(
+        player = CarFrame("player", 0f, 0f, 0f, 0f, 0),
+        opponents = emptyList(),
+        race = RaceFrame(0, 3, 1, false, 0f)
+    )
+        private set
+
+    private val engine: Engine
+    private val renderer: Renderer
+    private val scene: Scene
+    private val view: View
+    private val camera: Camera
+    private val uiHelper: UiHelper
+    private var swapChain: SwapChain? = null
+    private var destroyed = false
+    private val materialProvider: UbershaderProvider
+    private val assetLoader: AssetLoader
+    private val resourceLoader: ResourceLoader
+    private val assets = mutableMapOf<String, FilamentAsset>()
+    private val ready = IntArray(128)
+    private val matrices = mutableMapOf<String, FloatArray>()
+
+    private val roadMaterial: Material
+    private val roadInstance: MaterialInstance
+    private val roadVertexBuffer: VertexBuffer
+    private val roadIndexBuffer: IndexBuffer
+    private val roadEntity: Int
+    private val lineMaterial: Material
+    private val lineInstance: MaterialInstance
+    private val lineVertexBuffer: VertexBuffer
+    private val lineIndexBuffer: IndexBuffer
+    private val lineEntity: Int
+
+    init {
+        Filament.init()
+        MaterialBuilder.init()
+        engine = Engine.create(Engine.Backend.OPENGL)
+        renderer = engine.createRenderer()
+        scene = engine.createScene()
+        view = engine.createView()
+        camera = engine.createCamera(engine.entityManager.create())
+        view.scene = scene
+        view.camera = camera
+        view.renderQuality = view.renderQuality.apply {
+            hdrColorBuffer = View.QualityLevel.MEDIUM
+        }
+        view.dynamicResolutionOptions = view.dynamicResolutionOptions.apply {
+            enabled = true
+            quality = View.QualityLevel.MEDIUM
+        }
+        view.antiAliasing = View.AntiAliasing.FXAA
+
+        materialProvider = UbershaderProvider(engine)
+        assetLoader = AssetLoader(engine, materialProvider, EntityManager.get())
+        resourceLoader = ResourceLoader(engine, true)
+
+        val light = EntityManager.get().create()
+        LightManager.Builder(LightManager.Type.DIRECTIONAL)
+            .color(1.0f, 0.94f, 0.88f)
+            .intensity(100_000.0f)
+            .direction(0.5f, -1.0f, -0.7f)
+            .castShadows(true)
+            .build(engine, light)
+        scene.addEntity(light)
+
+        scene.skybox = Skybox.Builder()
+            .color(0.025f, 0.045f, 0.075f, 1.0f)
+            .build(engine)
+
+        val road = buildColorMaterial("road", 0.045f, 0.052f, 0.065f, 1f)
+        roadMaterial = road.first
+        roadInstance = road.second
+        val roadMesh = buildStripMesh(track, track.definition.halfWidthMeters, ROAD_SEGMENTS)
+        roadVertexBuffer = roadMesh.first
+        roadIndexBuffer = roadMesh.second
+        roadEntity = EntityManager.get().create()
+        RenderableManager.Builder(1)
+            .boundingBox(Box(-80f, -0.2f, -80f, 80f, 0.2f, 80f))
+            .geometry(0, RenderableManager.PrimitiveType.TRIANGLES, roadVertexBuffer, roadIndexBuffer)
+            .material(0, roadInstance)
+            .culling(false)
+            .receiveShadows(true)
+            .build(engine, roadEntity)
+        scene.addEntity(roadEntity)
+
+        val line = buildColorMaterial("center-line", 0.92f, 0.82f, 0.28f, 1f)
+        lineMaterial = line.first
+        lineInstance = line.second
+        val lineMesh = buildStripMesh(track, 0.055f, ROAD_SEGMENTS)
+        lineVertexBuffer = lineMesh.first
+        lineIndexBuffer = lineMesh.second
+        lineEntity = EntityManager.get().create()
+        RenderableManager.Builder(1)
+            .boundingBox(Box(-80f, -0.01f, -80f, 80f, 0.05f, 80f))
+            .geometry(0, RenderableManager.PrimitiveType.TRIANGLES, lineVertexBuffer, lineIndexBuffer)
+            .material(0, lineInstance)
+            .culling(false)
+            .build(engine, lineEntity)
+        scene.addEntity(lineEntity)
+
+        uiHelper = UiHelper(UiHelper.ContextErrorPolicy.DONT_CHECK)
+        uiHelper.renderCallback = object : UiHelper.RendererCallback {
+            override fun onNativeWindowChanged(surface: Surface) {
+                if (destroyed) return
+                swapChain?.let { engine.destroySwapChain(it) }
+                swapChain = engine.createSwapChain(surface)
+            }
+            override fun onDetachedFromSurface() {
+                swapChain?.let {
+                    engine.destroySwapChain(it)
+                    engine.flushAndWait()
+                    swapChain = null
+                }
+            }
+            override fun onResized(width: Int, height: Int) {
+                view.viewport = Viewport(0, 0, width, height)
+                if (height > 0) {
+                    camera.setProjection(60.0, width.toDouble() / height.toDouble(), 0.05, 500.0, Camera.Fov.VERTICAL)
+                }
+            }
+        }
+        uiHelper.attachTo(surfaceView)
+    }
+
+    override fun render(frame: GameSnapshot) {
+        if (destroyed) return
+        this.frame = frame
+        updateAssetTransforms(frame)
+        updateCamera(frame)
+        val now = System.nanoTime()
+        if (uiHelper.isReadyToRender && swapChain != null && renderer.beginFrame(swapChain!!, now)) {
+            renderer.render(view)
+            renderer.endFrame()
+        }
+    }
+
+    private fun updateAssetTransforms(frame: GameSnapshot) {
+        transform("player", frame.player.progress, frame.player.lateralOffset, frame.player.yawDegrees, 2.2f)
+        frame.opponents.forEachIndexed { index, car ->
+            transform("rival_$index", car.progress, car.lateralOffset, car.yawDegrees, 2.0f)
+        }
+        finalizePendingAssets()
+    }
+
+    private fun transform(id: String, progress: Float, lateral: Float, yaw: Float, scale: Float) {
+        val asset = assets[id] ?: return
+        val pose = track.pose(progress, lateral)
+        val matrix = matrices.getOrPut(id) { FloatArray(16) }
+        Matrix.setIdentityM(matrix, 0)
+        Matrix.translateM(matrix, 0, pose.x, 0.02f, pose.z)
+        Matrix.rotateM(matrix, 0, yaw, 0f, 1f, 0f)
+        Matrix.scaleM(matrix, 0, scale, scale, scale)
+        engine.transformManager.setTransform(engine.transformManager.getInstance(asset.root), matrix)
+    }
+
+    private fun finalizePendingAssets() {
+        resourceLoader.asyncUpdateLoad()
+        assets.values.forEach { asset ->
+            var count = asset.popRenderables(ready)
+            while (count > 0) {
+                scene.addEntities(ready.copyOf(count))
+                count = asset.popRenderables(ready)
+            }
+            scene.addEntities(asset.lightEntities)
+        }
+    }
+
+    private fun updateCamera(frame: GameSnapshot) {
+        val pose = track.pose(frame.player.progress, frame.player.lateralOffset)
+        val yaw = Math.toRadians(frame.player.yawDegrees.toDouble())
+        val forwardX = sin(yaw).toFloat()
+        val forwardZ = cos(yaw).toFloat()
+        camera.lookAt(
+            pose.x - forwardX * 6.0, 2.6, pose.z - forwardZ * 6.0,
+            pose.x + forwardX * 2.0, 0.8, pose.z + forwardZ * 2.0,
+            0.0, 1.0, 0.0
+        )
+    }
+
+    fun loadModel(id: String, path: String) {
+        if (assets.containsKey(id)) return
+        val bytes = surfaceView.context.assets.open(path).use { it.readBytes() }
+        val asset = assetLoader.createAsset(ByteBuffer.wrap(bytes)) ?: return
+        resourceLoader.asyncBeginLoad(asset)
+        asset.releaseSourceData()
+        assets[id] = asset
+    }
+
+    fun destroy() {
+        if (destroyed) return
+        destroyed = true
+        uiHelper.detach()
+        resourceLoader.asyncCancelLoad()
+        resourceLoader.evictResourceData()
+        assets.values.forEach {
+            scene.removeEntities(it.entities)
+            assetLoader.destroyAsset(it)
+        }
+        assets.clear()
+        engine.destroyEntity(roadEntity)
+        engine.destroyEntity(lineEntity)
+        engine.destroyRenderer(renderer)
+        engine.destroyView(view)
+        engine.destroyScene(scene)
+        engine.destroyCameraComponent(camera.entity)
+        EntityManager.get().destroy(camera.entity)
+        engine.destroyVertexBuffer(roadVertexBuffer)
+        engine.destroyIndexBuffer(roadIndexBuffer)
+        engine.destroyMaterialInstance(roadInstance)
+        engine.destroyMaterial(roadMaterial)
+        engine.destroyVertexBuffer(lineVertexBuffer)
+        engine.destroyIndexBuffer(lineIndexBuffer)
+        engine.destroyMaterialInstance(lineInstance)
+        engine.destroyMaterial(lineMaterial)
+        resourceLoader.destroy()
+        assetLoader.destroy()
+        materialProvider.destroyMaterials()
+        materialProvider.destroy()
+        engine.destroy()
+        MaterialBuilder.shutdown()
+    }
+
+    private fun buildColorMaterial(name: String, r: Float, g: Float, b: Float, a: Float): Pair<Material, MaterialInstance> {
+        val pkg = MaterialBuilder()
+            .name(name)
+            .platform(MaterialBuilder.Platform.MOBILE)
+            .targetApi(MaterialBuilder.TargetApi.OPENGL)
+            .shading(MaterialBuilder.Shading.UNLIT)
+            .uniformParameter(MaterialBuilder.UniformType.FLOAT4, "color")
+            .material(
+                "void material(inout MaterialInputs material) {" +
+                    "prepareMaterial(material);" +
+                    "material.baseColor = materialParams.color;" +
+                "}"
+            )
+            .build(engine)
+        check(pkg.isValid) { "Filament material compilation failed: $name" }
+        val buffer = pkg.buffer
+        val material = Material.Builder().payload(buffer, buffer.remaining()).build(engine)
+        val instance = material.createInstance()
+        instance.setParameter("color", r, g, b, a)
+        return material to instance
+    }
+
+    private fun buildStripMesh(track: Track, halfWidth: Float, segments: Int): Pair<VertexBuffer, IndexBuffer> {
+        val vertices = ByteBuffer.allocateDirect(segments * 2 * 3 * 4).order(java.nio.ByteOrder.nativeOrder())
+        val indices = ByteBuffer.allocateDirect(segments * 6 * 2).order(java.nio.ByteOrder.nativeOrder())
+        repeat(segments) { i ->
+            val p = i.toFloat() / segments
+            val a = track.pose(p, -halfWidth)
+            val b = track.pose(p, halfWidth)
+            vertices.putFloat(a.x).putFloat(0f).putFloat(a.z)
+            vertices.putFloat(b.x).putFloat(0f).putFloat(b.z)
+            val j = (i * 2).toShort()
+            val n = (((i + 1) % segments) * 2).toShort()
+            indices.putShort(j).putShort(n).putShort((n + 1).toShort())
+            indices.putShort(j).putShort((n + 1).toShort()).putShort((j + 1).toShort())
+        }
+        vertices.flip()
+        indices.flip()
+        val vb = VertexBuffer.Builder()
+            .vertexCount(segments * 2)
+            .bufferCount(1)
+            .attribute(VertexBuffer.VertexAttribute.POSITION, 0, VertexBuffer.AttributeType.FLOAT3)
+            .build(engine)
+        vb.setBufferAt(engine, 0, vertices.asFloatBuffer())
+        val ib = IndexBuffer.Builder()
+            .indexCount(segments * 6)
+            .bufferType(IndexBuffer.Builder.IndexType.USHORT)
+            .build(engine)
+        ib.setBuffer(engine, indices.asShortBuffer())
+        return vb to ib
+    }
+
+    companion object { private const val ROAD_SEGMENTS = 96 }
+}
