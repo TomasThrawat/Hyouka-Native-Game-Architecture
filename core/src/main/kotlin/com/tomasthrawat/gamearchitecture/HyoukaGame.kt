@@ -67,7 +67,7 @@ class HyoukaGame : ApplicationAdapter() {
         }
 
         val builder = ModelBuilder()
-        val attrs = Usage.Position or Usage.Normal
+        val attrs = Usage.Position.toLong() or Usage.Normal.toLong()
 
         groundModel = builder.createBox(
             110f, 0.2f, 110f,
