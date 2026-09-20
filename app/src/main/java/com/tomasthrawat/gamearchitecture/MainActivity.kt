@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
         val fallback = Game()
         val player = cars.firstOrNull { it.id == "starter_car" } ?: fallback.playerCar
         val rival = cars.firstOrNull { it.id == "rival_car" } ?: fallback.opponentCar
-        val track = tracks.firstOrNull() ?: fallback.track
-        return Game(track = Track(track), playerCar = player, opponentCar = rival)
+        val trackDefinition: TrackDefinition = tracks.firstOrNull() ?: fallback.track.definition
+        return Game(track = Track(trackDefinition), playerCar = player, opponentCar = rival)
     }
 }
