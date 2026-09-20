@@ -1,0 +1,30 @@
+buildscript {
+    ext {
+        appName = "Hyouka Native Game"
+        gdxVersion = "1.14.2"
+        kotlinVersion = "2.4.0"
+        projectVersion = "1.0.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:9.4.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+allprojects {
+    version = projectVersion
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = "UTF-8"
+    }
+}
