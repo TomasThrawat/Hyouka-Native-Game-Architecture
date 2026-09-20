@@ -26,8 +26,14 @@ class MainActivity : ComponentActivity() {
                 val game = remember { createGame(applicationContext) }
                 val renderer = remember { DirectFilamentRenderer(applicationContext, game.track) }
                 var input by remember { mutableStateOf(GameInput()) }
+                var frame by remember { mutableStateOf(game.snapshot) }
 
-                LaunchedEffect(game, renderer) {
+                LaunchedEffect(renderer) {
+                    renderer.loadModel("player", "models/starter_car.glb")
+                    renderer.loadModel("rival_0", "models/rival_car.glb")
+                    renderer.loadModel("rival_1", "models/rival_car.glb")
+                    renderer.loadModel("rival_2", "models/rival_car.glb")
+
                     var last = 0L
                     while (isActive) {
                         val now = System.nanoTime()
@@ -35,7 +41,9 @@ class MainActivity : ComponentActivity() {
                         else ((now - last) / 1_000_000_000f).coerceIn(0.001f, 0.05f)
                         last = now
                         game.update(input, dt)
-                        renderer.render(game.snapshot)
+                        val snapshot = game.snapshot
+                        renderer.render(snapshot)
+                        frame = snapshot
                         yield()
                     }
                 }
@@ -50,11 +58,13 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize()
                     )
                     GameHud(
-                        frame = renderer.frame,
+                        frame = frame,
                         onInput = { input = it },
                         onReset = {
                             game.reset()
-                            renderer.render(game.snapshot)
+                            val snapshot = game.snapshot
+                            renderer.render(snapshot)
+                            frame = snapshot
                         }
                     )
                 }
