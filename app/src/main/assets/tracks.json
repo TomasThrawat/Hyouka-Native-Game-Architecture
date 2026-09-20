@@ -1,10 +1,3 @@
-{
-  "tracks": [
-    {
-      "id": "starter",
-      "name": "Starter Track",
-      "model": "models/starter_track.glb",
-      "lapLengthMeters": 1000
-    }
-  ]
-}
+[
+  {"id":"demo_circuit","name":"Demo Circuit","lengthMeters":260,"halfWidthMeters":12,"halfDepthMeters":30}
+]

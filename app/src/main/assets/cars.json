@@ -1,10 +1,4 @@
-{
-  "cars": [
-    {
-      "id": "starter",
-      "model": "models/starter.glb",
-      "mass": 720,
-      "maxSpeedKmh": 300
-    }
-  ]
-}
+[
+  {"id":"starter_car","model":"models/starter_car.glb","massKg":1200,"maxSpeedKmh":310},
+  {"id":"rival_car","model":"models/rival_car.glb","massKg":1250,"maxSpeedKmh":295}
+]

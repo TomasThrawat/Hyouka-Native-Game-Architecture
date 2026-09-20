@@ -6,3 +6,10 @@ interface Sound {
     fun playUi()
     fun stopAll()
 }
+
+class SilentSound : Sound {
+    override fun playEngine(speedMetersPerSecond: Float) = Unit
+    override fun playCollision() = Unit
+    override fun playUi() = Unit
+    override fun stopAll() = Unit
+}
