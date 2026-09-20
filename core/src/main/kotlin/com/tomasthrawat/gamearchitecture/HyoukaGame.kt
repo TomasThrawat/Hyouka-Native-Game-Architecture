@@ -38,7 +38,7 @@ class HyoukaGame:ApplicationAdapter(){
         game=Game()
         val cfg=PBRShaderProvider.createDefaultConfig()
         cfg.numDirectionalLights=2; cfg.numPointLights=0; cfg.numSpotLights=0; cfg.numBones=0
-        manager=SceneManager(PBRShaderProvider.createDefault(cfg))
+        manager=SceneManager(PBRShaderProvider.createDefault(cfg), PBRShaderProvider.createDefaultDepth(PBRShaderProvider.createDefaultDepthConfig()))
         camera=PerspectiveCamera(62f,max(Gdx.graphics.width,1).toFloat(),max(Gdx.graphics.height,1).toFloat())
         camera.near=.1f; camera.far=420f
         batch=SpriteBatch(); font=BitmapFont(); shapes=ShapeRenderer()
