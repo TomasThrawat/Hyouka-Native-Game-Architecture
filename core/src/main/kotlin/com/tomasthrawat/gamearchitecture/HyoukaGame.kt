@@ -42,13 +42,12 @@ class HyoukaGame : ApplicationAdapter() {
     private val assets = mutableListOf<SceneAsset>()
     private val fallbackModels = mutableListOf<Model>()
     private val cars = mutableListOf<Scene>()
-    private val roads = mutableListOf<Scene>()
-    private lateinit var roadModel: Model
-    private lateinit var roadStripeModel: Model
-    private lateinit var roadCurbModel: Model
-    private val roadInstances = mutableListOf<ModelInstance>()
-    private val roadStripeInstances = mutableListOf<ModelInstance>()
-    private val roadCurbInstances = mutableListOf<ModelInstance>()
+    private var roadModel: Model? = null
+    private var roadStripeModel: Model? = null
+    private var roadCurbModel: Model? = null
+    private var roadInstance: ModelInstance? = null
+    private var roadStripeInstance: ModelInstance? = null
+    private var roadCurbInstance: ModelInstance? = null
     private var trackIndex = 0
 
     override fun create() {
@@ -94,8 +93,6 @@ class HyoukaGame : ApplicationAdapter() {
         batch = SpriteBatch()
         font = BitmapFont()
         shapes = ShapeRenderer()
-        buildProceduralRoadModels()
-
         loadAssets()
         selectTrack(0)
     }
@@ -159,12 +156,6 @@ class HyoukaGame : ApplicationAdapter() {
             )
         }
 
-        repeat(18) { roads += add("straight") }
-        repeat(8) { roads += add("corner90") }
-        repeat(3) { roads += add("hairpin") }
-        repeat(6) { roads += add("tyre_wall") }
-        repeat(3) { roads += add("grandstand") }
-        repeat(1) { roads += add("start_gantry") }
 
         Gdx.app.log(
             "HyoukaGame",
@@ -176,10 +167,28 @@ class HyoukaGame : ApplicationAdapter() {
         trackIndex = i.coerceIn(0, 2)
         game.track.selectLayout(trackIndex)
         game.reset()
-        layoutRoad()
+        rebuildProceduralRoadModels()
     }
 
-    private fun buildProceduralRoadModels() {
+    private fun rebuildProceduralRoadModels() {
+        roadInstance?.let {
+            manager.getRenderableProviders().removeValue(it, true)
+        }
+        roadStripeInstance?.let {
+            manager.getRenderableProviders().removeValue(it, true)
+        }
+        roadCurbInstance?.let {
+            manager.getRenderableProviders().removeValue(it, true)
+        }
+
+        roadModel?.dispose()
+        roadStripeModel?.dispose()
+        roadCurbModel?.dispose()
+
+        roadInstance = null
+        roadStripeInstance = null
+        roadCurbInstance = null
+
         val roadMaterial = Material(
             PBRColorAttribute.createBaseColorFactor(Color(0.16f, 0.17f, 0.18f, 1f))
         )
@@ -190,14 +199,31 @@ class HyoukaGame : ApplicationAdapter() {
             PBRColorAttribute.createBaseColorFactor(Color(0.88f, 0.10f, 0.08f, 1f))
         )
 
-        val points = game.track.waypoints()
-        roadModel = buildTrackStrip(points, 5.2f, 0.0f, roadMaterial, "road")
-        roadStripeModel = buildTrackStrip(points, 0.10f, 0.065f, stripeMaterial, "center")
-        roadCurbModel = buildTrackCurbs(points, 5.05f, 0.075f, curbMaterial)
+        val points = game.track.sampledCenterline(24)
+        val halfWidth = game.track.definition.halfWidthMeters
 
-        manager.getRenderableProviders().add(ModelInstance(roadModel))
-        manager.getRenderableProviders().add(ModelInstance(roadStripeModel))
-        manager.getRenderableProviders().add(ModelInstance(roadCurbModel))
+        roadModel = buildTrackStrip(points, halfWidth, 0.0f, roadMaterial, "road")
+        roadStripeModel = buildTrackStrip(
+            points, 0.11f, 0.045f, stripeMaterial, "center"
+        )
+        roadCurbModel = buildTrackCurbs(
+            points, halfWidth + 0.04f, 0.075f, curbMaterial
+        )
+
+        roadInstance = ModelInstance(roadModel)
+        roadStripeInstance = ModelInstance(roadStripeModel)
+        roadCurbInstance = ModelInstance(roadCurbModel)
+
+        manager.getRenderableProviders().add(roadInstance)
+        manager.getRenderableProviders().add(roadStripeInstance)
+        manager.getRenderableProviders().add(roadCurbInstance)
+
+        Gdx.app.log(
+            "HyoukaGame",
+            "Track mesh rebuilt: layout=" + (trackIndex + 1) +
+                " samples=" + points.size +
+                " length=" + game.track.lengthMeters()
+        )
     }
 
     private fun buildTrackStrip(
@@ -209,60 +235,49 @@ class HyoukaGame : ApplicationAdapter() {
     ): Model {
         val builder = ModelBuilder()
         builder.begin()
-        val attributes = VertexAttributes.Usage.Position.toLong() or VertexAttributes.Usage.Normal.toLong()
+        val attributes =
+            VertexAttributes.Usage.Position.toLong() or
+                VertexAttributes.Usage.Normal.toLong()
         val part = builder.part(id, GL20.GL_TRIANGLES, attributes, material)
 
-        fun pointInfo(x: Float, z: Float) =
+        fun info(x: Float, z: Float) =
             MeshPartBuilder.VertexInfo().setPos(x, y, z).setNor(0f, 1f, 0f)
 
-        for (i in points.indices) {
-            val prev = points[(i - 1 + points.size) % points.size]
+        fun edge(i: Int): Pair<Pair<Float, Float>, Pair<Float, Float>> {
+            val n = points.size
+            val prev = points[(i - 1 + n) % n]
             val cur = points[i]
-            val next = points[(i + 1) % points.size]
+            val next = points[(i + 1) % n]
 
-            val prevDx = cur.first - prev.first
-            val prevDz = cur.second - prev.second
-            val nextDx = next.first - cur.first
-            val nextDz = next.second - cur.second
+            var tx = next.first - prev.first
+            var tz = next.second - prev.second
+            var len = sqrt(tx * tx + tz * tz)
+            if (len < 0.001f) {
+                tx = next.first - cur.first
+                tz = next.second - cur.second
+                len = sqrt(tx * tx + tz * tz).coerceAtLeast(0.001f)
+            }
 
-            val prevLen = sqrt(prevDx * prevDx + prevDz * prevDz).coerceAtLeast(0.001f)
-            val nextLen = sqrt(nextDx * nextDx + nextDz * nextDz).coerceAtLeast(0.001f)
+            tx /= len
+            tz /= len
+            val nx = -tz
+            val nz = tx
 
-            val tx = prevDx / prevLen + nextDx / nextLen
-            val tz = prevDz / prevLen + nextDz / nextLen
-            val tLen = sqrt(tx * tx + tz * tz).coerceAtLeast(0.001f)
-            val nx = -tz / tLen
-            val nz = tx / tLen
+            return Pair(
+                cur.first + nx * halfWidth to cur.second + nz * halfWidth,
+                cur.first - nx * halfWidth to cur.second - nz * halfWidth
+            )
+        }
 
-            val leftX = cur.first + nx * halfWidth
-            val leftZ = cur.second + nz * halfWidth
-            val rightX = cur.first - nx * halfWidth
-            val rightZ = cur.second - nz * halfWidth
-
-            val nextPrev = next
-            val nextNext = points[(i + 2) % points.size]
-            val ndx1 = nextPrev.first - cur.first
-            val ndz1 = nextPrev.second - cur.second
-            val ndx2 = nextNext.first - nextPrev.first
-            val ndz2 = nextNext.second - nextPrev.second
-            val l1 = sqrt(ndx1 * ndx1 + ndz1 * ndz1).coerceAtLeast(0.001f)
-            val l2 = sqrt(ndx2 * ndx2 + ndz2 * ndz2).coerceAtLeast(0.001f)
-            val ntx = ndx1 / l1 + ndx2 / l2
-            val ntz = ndz1 / l1 + ndz2 / l2
-            val ntLen = sqrt(ntx * ntx + ntz * ntz).coerceAtLeast(0.001f)
-            val nnx = -ntz / ntLen
-            val nnz = ntx / ntLen
-
-            val nextLeftX = nextPrev.first + nnx * halfWidth
-            val nextLeftZ = nextPrev.second + nnz * halfWidth
-            val nextRightX = nextPrev.first - nnx * halfWidth
-            val nextRightZ = nextPrev.second - nnz * halfWidth
+        for (i in points.indices) {
+            val a = edge(i)
+            val b = edge((i + 1) % points.size)
 
             part.rect(
-                pointInfo(rightX, rightZ),
-                pointInfo(leftX, leftZ),
-                pointInfo(nextLeftX, nextLeftZ),
-                pointInfo(nextRightX, nextRightZ)
+                info(b.second.first, b.second.second),
+                info(a.first.first, a.first.second),
+                info(b.first.first, b.first.second),
+                info(b.second.first, b.second.second)
             )
         }
 
@@ -277,51 +292,66 @@ class HyoukaGame : ApplicationAdapter() {
     ): Model {
         val builder = ModelBuilder()
         builder.begin()
-        val attributes = VertexAttributes.Usage.Position.toLong() or VertexAttributes.Usage.Normal.toLong()
+        val attributes =
+            VertexAttributes.Usage.Position.toLong() or
+                VertexAttributes.Usage.Normal.toLong()
         val part = builder.part("curbs", GL20.GL_TRIANGLES, attributes, material)
 
         fun info(x: Float, z: Float) =
             MeshPartBuilder.VertexInfo().setPos(x, y, z).setNor(0f, 1f, 0f)
 
-        val curbWidth = 0.22f
+        val curbWidth = 0.24f
+
+        fun edge(i: Int): Pair<Pair<Float, Float>, Pair<Float, Float>> {
+            val n = points.size
+            val prev = points[(i - 1 + n) % n]
+            val cur = points[i]
+            val next = points[(i + 1) % n]
+
+            var tx = next.first - prev.first
+            var tz = next.second - prev.second
+            var len = sqrt(tx * tx + tz * tz)
+            if (len < 0.001f) {
+                tx = next.first - cur.first
+                tz = next.second - cur.second
+                len = sqrt(tx * tx + tz * tz).coerceAtLeast(0.001f)
+            }
+
+            tx /= len
+            tz /= len
+            val nx = -tz
+            val nz = tx
+
+            return Pair(
+                cur.first + nx * halfWidth to cur.second + nz * halfWidth,
+                cur.first - nx * halfWidth to cur.second - nz * halfWidth
+            )
+        }
 
         for (i in points.indices) {
-            val cur = points[i]
-            val next = points[(i + 1) % points.size]
-            val dx = next.first - cur.first
-            val dz = next.second - cur.second
-            val len = sqrt(dx * dx + dz * dz).coerceAtLeast(0.001f)
-            val nx = -dz / len
-            val nz = dx / len
+            val a = edge(i)
+            val b = edge((i + 1) % points.size)
 
-            val lx1 = cur.first + nx * halfWidth
-            val lz1 = cur.second + nz * halfWidth
-            val lx2 = next.first + nx * halfWidth
-            val lz2 = next.second + nz * halfWidth
-            val rx1 = cur.first - nx * halfWidth
-            val rz1 = cur.second - nz * halfWidth
-            val rx2 = next.first - nx * halfWidth
-            val rz2 = next.second - nz * halfWidth
+            val lDx = b.first.first - a.first.first
+            val lDz = b.first.second - a.first.second
+            val rDx = b.second.first - a.second.first
+            val rDz = b.second.second - a.second.second
 
             part.rect(
-                info(lx1 - nx * curbWidth, lz1 - nz * curbWidth),
-                info(lx1 + nx * curbWidth, lz1 + nz * curbWidth),
-                info(lx2 + nx * curbWidth, lz2 + nz * curbWidth),
-                info(lx2 - nx * curbWidth, lz2 - nz * curbWidth)
+                info(a.first.first - lDx * 0.02f, a.first.second - lDz * 0.02f),
+                info(a.first.first + lDx * 0.02f, a.first.second + lDz * 0.02f),
+                info(b.first.first + lDx * 0.02f, b.first.second + lDz * 0.02f),
+                info(b.first.first - lDx * 0.02f, b.first.second - lDz * 0.02f)
             )
             part.rect(
-                info(rx1 + nx * curbWidth, rz1 + nz * curbWidth),
-                info(rx1 - nx * curbWidth, rz1 - nz * curbWidth),
-                info(rx2 - nx * curbWidth, rz2 - nz * curbWidth),
-                info(rx2 + nx * curbWidth, rz2 + nz * curbWidth)
+                info(a.second.first + rDx * 0.02f, a.second.second + rDz * 0.02f),
+                info(a.second.first - rDx * 0.02f, a.second.second - rDz * 0.02f),
+                info(b.second.first - rDx * 0.02f, b.second.second - rDz * 0.02f),
+                info(b.second.first + rDx * 0.02f, b.second.second + rDz * 0.02f)
             )
         }
 
         return builder.end()
-    }
-
-    private fun layoutRoad() {
-        Gdx.app.log("HyoukaGame", "Continuous track mesh ready")
     }
 
     override fun render() {
@@ -470,8 +500,8 @@ class HyoukaGame : ApplicationAdapter() {
         batch.dispose()
         font.dispose()
         shapes.dispose()
-        roadModel.dispose()
-        roadStripeModel.dispose()
-        roadCurbModel.dispose()
+        roadModel?.dispose()
+        roadStripeModel?.dispose()
+        roadCurbModel?.dispose()
     }
 }

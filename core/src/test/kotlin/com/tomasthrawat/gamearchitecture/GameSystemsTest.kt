@@ -48,6 +48,14 @@ class GameSystemsTest {
     }
 
     @Test
+    fun trackLengthMatchesRenderedPathScale() {
+        val track = Track()
+        assertTrue(track.lengthMeters() > 300f)
+        assertTrue(track.lengthMeters() < 500f)
+        assertTrue(track.sampledCenterline(8).size >= 80)
+    }
+
+    @Test
     fun carsOverlapUsesTrackDistance() {
         val a = CarState("a")
         val b = CarState("b", progress = 0.01f)

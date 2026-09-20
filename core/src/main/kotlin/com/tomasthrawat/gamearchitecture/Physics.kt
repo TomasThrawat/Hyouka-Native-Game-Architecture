@@ -33,7 +33,7 @@ class Physics {
         var progress =
             car.progress +
                 car.speedMetersPerSecond * step /
-                track.definition.lengthMeters.coerceAtLeast(1f)
+                track.lengthMeters().coerceAtLeast(1f)
 
         while (progress >= 1f) {
             progress -= 1f

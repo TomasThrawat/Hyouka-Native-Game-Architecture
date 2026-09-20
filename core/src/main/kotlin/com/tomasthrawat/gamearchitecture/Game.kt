@@ -44,7 +44,7 @@ class Game(
         }
 
         opponents.forEach { opponent ->
-            if (collision.carsOverlap(player, opponent, track.definition.lengthMeters)) {
+            if (collision.carsOverlap(player, opponent, track.lengthMeters())) {
                 player.speedMetersPerSecond *= 0.82f
                 opponent.speedMetersPerSecond *= 0.94f
             }
