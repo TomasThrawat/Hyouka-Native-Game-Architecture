@@ -1,14 +1,12 @@
 apply plugin: "java-library"
-apply plugin: "kotlin"
+apply plugin: "org.jetbrains.kotlin.jvm"
 
-sourceCompatibility = 8
-targetCompatibility = 8
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-compileTestKotlin {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions.jvmTarget = "1.8"
 }
 
