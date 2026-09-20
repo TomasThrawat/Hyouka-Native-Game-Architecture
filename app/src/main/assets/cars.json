@@ -1,0 +1,10 @@
+{
+  "cars": [
+    {
+      "id": "starter",
+      "model": "models/starter.glb",
+      "mass": 720,
+      "maxSpeedKmh": 300
+    }
+  ]
+}

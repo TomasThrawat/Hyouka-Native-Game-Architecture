@@ -1,0 +1,10 @@
+{
+  "tracks": [
+    {
+      "id": "starter",
+      "name": "Starter Track",
+      "model": "models/starter_track.glb",
+      "lapLengthMeters": 1000
+    }
+  ]
+}
