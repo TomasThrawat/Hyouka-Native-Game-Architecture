@@ -274,10 +274,10 @@ class HyoukaGame : ApplicationAdapter() {
             val b = edge((i + 1) % points.size)
 
             part.rect(
-                info(a.first.first, a.first.second),
                 info(a.second.first, a.second.second),
-                info(b.second.first, b.second.second),
-                info(b.first.first, b.first.second)
+                info(a.first.first, a.first.second),
+                info(b.first.first, b.first.second),
+                info(b.second.first, b.second.second)
             )
         }
 
